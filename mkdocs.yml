@@ -1,0 +1,9 @@
+site_name: k8shorizmetrics
+theme: material
+markdown_extensions:
+  - mdx_truly_sane_lists
+  - codehilite
+plugins:
+  - search
+nav:
+- Home: 'index.md'

@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: php-apache
+  name: php-apache
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      run: php-apache
+  template:
+    metadata:
+      labels:
+        run: php-apache
+    spec:
+      containers:
+      - image: k8s.gcr.io/hpa-example
+        imagePullPolicy: Always
+        name: php-apache
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-apache
+  namespace: default
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: php-apache
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cpuprint
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: cpuprint
+rules:
+- apiGroups:
+  - "metrics.k8s.io"
+  resources:
+  - pods
+  verbs:
+  - '*'
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - '*'
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: cpuprint
+subjects:
+- kind: ServiceAccount
+  name: cpuprint
+roleRef:
+  kind: Role
+  name: cpuprint
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: cpuprint
+  name: cpuprint
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: cpuprint
+  template:
+    metadata:
+      labels:
+        run: cpuprint
+    spec:
+      serviceAccountName: cpuprint
+      containers:
+      - image: cpuprint:latest
+        imagePullPolicy: IfNotPresent
+        name: cpuprint
+      restartPolicy: Always
