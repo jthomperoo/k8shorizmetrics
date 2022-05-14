@@ -2,15 +2,13 @@
 [![go.dev](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat)](https://pkg.go.dev/github.com/jthomperoo/k8shorizmetrics)
 [![Go Report
 Card](https://goreportcard.com/badge/github.com/jthomperoo/k8shorizmetrics)](https://goreportcard.com/report/github.com/jthomperoo/k8shorizmetrics)
-[![Documentation
-Status](https://readthedocs.org/projects/k8shorizmetrics/badge/?version=latest)](https://k8shorizmetrics.readthedocs.io/en/latest)
 [![License](https://img.shields.io/:license-apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 # k8shorizmetrics
 
 `k8shorizmetrics` is a library that provides the internal workings of the Kubernetes Horizontal Pod Autoscaler (HPA)
 wrapped up in a simple API. The project allows querying metrics just as the HPA does, and also running the calculations
-the HPA does.
+to work out the target replica count that the HPA does.
 
 ## Install
 
@@ -27,6 +25,9 @@ go get -u github.com/jthomperoo/k8shorizmetrics
 - Supports scaling to and from 0.
 
 ## Quick Start
+
+The following is a simple program that can run inside a Kubernetes cluster that gets the CPU resource metrics for
+pods with the label `run: php-apache`.
 
 ```go
 package main
@@ -85,6 +86,10 @@ func main() {
 	}
 }
 ```
+
+## Documentation
+
+See the [Go doc](https://pkg.go.dev/github.com/jthomperoo/k8shorizmetrics).
 
 ## Examples
 
