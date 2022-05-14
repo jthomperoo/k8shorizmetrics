@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/golang/glog"
 	"github.com/jthomperoo/k8shorizmetrics/metrics/podmetrics"
 	autoscalingv2 "k8s.io/api/autoscaling/v2beta2"
 	v1 "k8s.io/api/core/v1"
@@ -89,7 +88,6 @@ func (c *RESTClient) GetResourceMetric(resource v1.ResourceName, namespace strin
 			resValue, found := c.Usage[resource]
 			if !found {
 				missing = true
-				glog.V(4).Infof("missing resource metric %v for %s/%s", resource, m.Namespace, m.Name)
 				break
 			}
 			podSum += resValue.MilliValue()
