@@ -10,7 +10,7 @@ Status](https://readthedocs.org/projects/k8shorizmetrics/badge/?version=latest)]
 
 `k8shorizmetrics` is a library that provides the internal workings of the Kubernetes Horizontal Pod Autoscaler (HPA)
 wrapped up in a simple API. The project allows querying metrics just as the HPA does, and also running the calculations
-the HPA does
+the HPA does.
 
 ## Install
 
@@ -24,6 +24,7 @@ go get -u github.com/jthomperoo/k8shorizmetrics
 - Dependent only on versioned and public Kubernetes Golang modules, allows easy install without replace directives.
 - Splits the HPA into two parts, metric gathering and evaluation, only use what you need.
 - Allows insights into how the HPA makes decisions.
+- Supports scaling to and from 0.
 
 ## Quick Start
 
@@ -45,43 +46,43 @@ import (
 )
 
 func main() {
-    // Kubernetes API setup
-    clusterConfig, _ := rest.InClusterConfig()
-    clientset, _ := kubernetes.NewForConfig(clusterConfig)
-    // Metrics and pods clients setup
-    metricsclient := metricsclient.NewClient(clusterConfig, clientset.Discovery())
-    podsclient := &podsclient.OnDemandPodLister{ Clientset: clientset }
-    // HPA configuration options
-    cpuInitializationPeriod := time.Duration(300) * time.Second
-    initialReadinessDelay := time.Duration(30) * time.Second
+	// Kubernetes API setup
+	clusterConfig, _ := rest.InClusterConfig()
+	clientset, _ := kubernetes.NewForConfig(clusterConfig)
+	// Metrics and pods clients setup
+	metricsclient := metricsclient.NewClient(clusterConfig, clientset.Discovery())
+	podsclient := &podsclient.OnDemandPodLister{Clientset: clientset}
+	// HPA configuration options
+	cpuInitializationPeriod := time.Duration(300) * time.Second
+	initialReadinessDelay := time.Duration(30) * time.Second
 
-    // Setup gatherer
-    gather := k8shorizmetrics.NewGatherer(metricsclient, podsclient, cpuInitializationPeriod, initialReadinessDelay)
+	// Setup gatherer
+	gather := k8shorizmetrics.NewGatherer(metricsclient, podsclient, cpuInitializationPeriod, initialReadinessDelay)
 
-    // Target resource values
-    namespace := "default"
-    podSelector := labels.SelectorFromSet(labels.Set{
-        "run": "hello-world",
-    }
+	// Target resource values
+	namespace := "default"
+	podSelector := labels.SelectorFromSet(labels.Set{
+		"run": "php-apache",
+	})
 
-    // Metric spec to gather, CPU resource utilization
-    spec := v2beta2.MetricSpec{
-        Type: v2beta2.ResourceMetricSourceType,
-        Resource: &v2beta2.ResourceMetricSource{
-            Name: corev1.ResourceCPU,
-            Target: v2beta2.MetricTarget{
-                Type: v2beta2.UtilizationMetricType,
-            },
-        },
-    }
+	// Metric spec to gather, CPU resource utilization
+	spec := v2beta2.MetricSpec{
+		Type: v2beta2.ResourceMetricSourceType,
+		Resource: &v2beta2.ResourceMetricSource{
+			Name: corev1.ResourceCPU,
+			Target: v2beta2.MetricTarget{
+				Type: v2beta2.UtilizationMetricType,
+			},
+		},
+	}
 
-    metric, _ := gather.GatherSingleMetric(spec, namespace, podSelector)
+	metric, _ := gather.GatherSingleMetric(spec, namespace, podSelector)
 
-    for pod, podmetric := range metric.Resource.PodMetricsInfo {
-        actualCPU := podmetric.Value
-        requestedCPU := metric.Resource.Requests[pod]
-        log.Printf("Pod: %s, CPU usage: %dm (%0.2f%% of requested)\n", pod, actualCPU, float64(actualCPU)/float64(requestedCPU)*100.0)
-    }
+	for pod, podmetric := range metric.Resource.PodMetricsInfo {
+		actualCPU := podmetric.Value
+		requestedCPU := metric.Resource.Requests[pod]
+		log.Printf("Pod: %s, CPU usage: %dm (%0.2f%% of requested)\n", pod, actualCPU, float64(actualCPU)/float64(requestedCPU)*100.0)
+	}
 }
 ```
 
