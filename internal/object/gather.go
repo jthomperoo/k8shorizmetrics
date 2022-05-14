@@ -31,23 +31,23 @@ import (
 	"fmt"
 
 	"github.com/jthomperoo/k8shorizmetrics/internal/podutil"
-	metricclient "github.com/jthomperoo/k8shorizmetrics/metricclient"
 	"github.com/jthomperoo/k8shorizmetrics/metrics/object"
 	"github.com/jthomperoo/k8shorizmetrics/metrics/value"
+	metricsclient "github.com/jthomperoo/k8shorizmetrics/metricsclient"
 	autoscaling "k8s.io/api/autoscaling/v2beta2"
 	"k8s.io/apimachinery/pkg/labels"
 )
 
 // Gather (Object) provides functionality for retrieving metrics for object metric specs.
 type Gather struct {
-	MetricClient    metricclient.Client
+	MetricsClient   metricsclient.Client
 	PodReadyCounter podutil.PodReadyCounter
 }
 
 // Gather retrieves an object metric
 func (c *Gather) Gather(metricName string, namespace string, objectRef *autoscaling.CrossVersionObjectReference, podSelector labels.Selector, metricSelector labels.Selector) (*object.Metric, error) {
 	// Get metrics
-	utilization, timestamp, err := c.MetricClient.GetObjectMetric(metricName, namespace, objectRef, metricSelector)
+	utilization, timestamp, err := c.MetricsClient.GetObjectMetric(metricName, namespace, objectRef, metricSelector)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get metric %s: %s on %s %s: %w", metricName, objectRef.Kind, namespace, objectRef.Name, err)
 	}
@@ -70,7 +70,7 @@ func (c *Gather) Gather(metricName string, namespace string, objectRef *autoscal
 // GatherPerPod retrieves an object per pod metric
 func (c *Gather) GatherPerPod(metricName string, namespace string, objectRef *autoscaling.CrossVersionObjectReference, metricSelector labels.Selector) (*object.Metric, error) {
 	// Get metrics
-	utilization, timestamp, err := c.MetricClient.GetObjectMetric(metricName, namespace, objectRef, metricSelector)
+	utilization, timestamp, err := c.MetricsClient.GetObjectMetric(metricName, namespace, objectRef, metricSelector)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get metric %s: %s on %s %s/%w", metricName, objectRef.Kind, namespace, objectRef.Name, err)
 	}

@@ -32,9 +32,9 @@ import (
 	"math"
 
 	"github.com/jthomperoo/k8shorizmetrics/internal/replicas"
-	"github.com/jthomperoo/k8shorizmetrics/metricclient"
 	"github.com/jthomperoo/k8shorizmetrics/metrics"
 	"github.com/jthomperoo/k8shorizmetrics/metrics/podmetrics"
+	"github.com/jthomperoo/k8shorizmetrics/metricsclient"
 )
 
 // Evaluate (resource) calculates a replica count evaluation, using the tolerance and calculater provided
@@ -65,7 +65,7 @@ func (e *Evaluate) Evaluate(currentReplicas int32, gatheredMetric *metrics.Metri
 		missingPods := gatheredMetric.Resource.MissingPods
 		readyPodCount := gatheredMetric.Resource.ReadyPodCount
 
-		usageRatio, _, _, err := metricclient.GetResourceUtilizationRatio(metrics, requests, targetUtilization)
+		usageRatio, _, _, err := metricsclient.GetResourceUtilizationRatio(metrics, requests, targetUtilization)
 		if err != nil {
 			return 0, err
 		}
@@ -109,7 +109,7 @@ func (e *Evaluate) Evaluate(currentReplicas int32, gatheredMetric *metrics.Metri
 		}
 
 		// re-run the utilization calculation with our new numbers
-		newUsageRatio, _, _, err := metricclient.GetResourceUtilizationRatio(metrics, requests, targetUtilization)
+		newUsageRatio, _, _, err := metricsclient.GetResourceUtilizationRatio(metrics, requests, targetUtilization)
 		if err != nil {
 			// NOTE - Unsure if this can be triggered.
 			return 0, err

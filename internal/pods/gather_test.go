@@ -24,9 +24,9 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/jthomperoo/k8shorizmetrics/internal/fake"
 	"github.com/jthomperoo/k8shorizmetrics/internal/pods"
-	metricclient "github.com/jthomperoo/k8shorizmetrics/metricclient"
 	"github.com/jthomperoo/k8shorizmetrics/metrics/podmetrics"
 	podsmetric "github.com/jthomperoo/k8shorizmetrics/metrics/pods"
+	metricsclient "github.com/jthomperoo/k8shorizmetrics/metricsclient"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -46,7 +46,7 @@ func TestGather(t *testing.T) {
 		description    string
 		expected       *podsmetric.Metric
 		expectedErr    error
-		metricclient   metricclient.Client
+		metricsclient  metricsclient.Client
 		podLister      corelisters.PodLister
 		metricName     string
 		namespace      string
@@ -57,7 +57,7 @@ func TestGather(t *testing.T) {
 			"Fail to get metric",
 			nil,
 			errors.New("unable to get metric test-metric: fail to get metric"),
-			&fake.MetricClient{
+			&fake.MetricsClient{
 				GetRawMetricReactor: func(metricName, namespace string, selector, metricSelector labels.Selector) (podmetrics.MetricsInfo, time.Time, error) {
 					return nil, time.Time{}, errors.New("fail to get metric")
 				},
@@ -72,7 +72,7 @@ func TestGather(t *testing.T) {
 			"Fail to get pods",
 			nil,
 			errors.New("unable to get pods while calculating replica count: fail to get pods"),
-			&fake.MetricClient{
+			&fake.MetricsClient{
 				GetRawMetricReactor: func(metricName, namespace string, selector, metricSelector labels.Selector) (podmetrics.MetricsInfo, time.Time, error) {
 					return nil, time.Time{}, nil
 				},
@@ -99,7 +99,7 @@ func TestGather(t *testing.T) {
 				Timestamp:     time.Time{},
 			},
 			nil,
-			&fake.MetricClient{
+			&fake.MetricsClient{
 				GetRawMetricReactor: func(metricName, namespace string, selector, metricSelector labels.Selector) (podmetrics.MetricsInfo, time.Time, error) {
 					return podmetrics.MetricsInfo{
 						"test-pod": podmetrics.Metric{},
@@ -136,7 +136,7 @@ func TestGather(t *testing.T) {
 				},
 			},
 			nil,
-			&fake.MetricClient{
+			&fake.MetricsClient{
 				GetRawMetricReactor: func(metricName, namespace string, selector, metricSelector labels.Selector) (podmetrics.MetricsInfo, time.Time, error) {
 					return podmetrics.MetricsInfo{
 						"ready-pod-1": podmetrics.Metric{},
@@ -189,8 +189,8 @@ func TestGather(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.description, func(t *testing.T) {
 			gatherer := &pods.Gather{
-				MetricClient: test.metricclient,
-				PodLister:    test.podLister,
+				MetricsClient: test.metricsclient,
+				PodLister:     test.podLister,
 			}
 			metric, err := gatherer.Gather(test.metricName, test.namespace, test.selector, test.metricSelector)
 			if !cmp.Equal(&err, &test.expectedErr, equateErrorMessage) {

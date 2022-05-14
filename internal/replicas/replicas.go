@@ -30,8 +30,8 @@ package replicas
 import (
 	"math"
 
-	"github.com/jthomperoo/k8shorizmetrics/metricclient"
 	"github.com/jthomperoo/k8shorizmetrics/metrics/podmetrics"
+	"github.com/jthomperoo/k8shorizmetrics/metricsclient"
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 
@@ -78,7 +78,7 @@ func (r *ReplicaCalculator) GetPlainMetricReplicaCount(metrics podmetrics.Metric
 	missingPods,
 	ignoredPods sets.String) int32 {
 
-	usageRatio, _ := metricclient.GetMetricUtilizationRatio(metrics, targetUtilization)
+	usageRatio, _ := metricsclient.GetMetricUtilizationRatio(metrics, targetUtilization)
 
 	// usageRatio = SUM(pod metrics) / number of pods / targetUtilization
 	// usageRatio = averageUtilization / targetUtilization
@@ -120,7 +120,7 @@ func (r *ReplicaCalculator) GetPlainMetricReplicaCount(metrics podmetrics.Metric
 	}
 
 	// re-run the utilization calculation with our new numbers
-	newUsageRatio, _ := metricclient.GetMetricUtilizationRatio(metrics, targetUtilization)
+	newUsageRatio, _ := metricsclient.GetMetricUtilizationRatio(metrics, targetUtilization)
 
 	if math.Abs(1.0-newUsageRatio) <= r.Tolerance || (usageRatio < 1.0 && newUsageRatio > 1.0) || (usageRatio > 1.0 && newUsageRatio < 1.0) {
 		// return the current replicas if the change would be too small,

@@ -36,12 +36,12 @@ import (
 	"github.com/jthomperoo/k8shorizmetrics/internal/pods"
 	"github.com/jthomperoo/k8shorizmetrics/internal/podutil"
 	"github.com/jthomperoo/k8shorizmetrics/internal/resource"
-	metricclient "github.com/jthomperoo/k8shorizmetrics/metricclient"
 	"github.com/jthomperoo/k8shorizmetrics/metrics"
 	externalmetrics "github.com/jthomperoo/k8shorizmetrics/metrics/external"
 	objectmetrics "github.com/jthomperoo/k8shorizmetrics/metrics/object"
 	podsmetrics "github.com/jthomperoo/k8shorizmetrics/metrics/pods"
 	resourcemetrics "github.com/jthomperoo/k8shorizmetrics/metrics/resource"
+	metricsclient "github.com/jthomperoo/k8shorizmetrics/metricsclient"
 	autoscalingv2 "k8s.io/api/autoscaling/v2beta2"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -84,7 +84,7 @@ type Gatherer struct {
 
 // NewGatherer sets up a new Metric Gatherer
 func NewGatherer(
-	metricclient metricclient.Client,
+	metricsclient metricsclient.Client,
 	podlister corelisters.PodLister,
 	cpuInitializationPeriod time.Duration,
 	delayOfInitialReadinessStatus time.Duration) *Gatherer {
@@ -96,21 +96,21 @@ func NewGatherer(
 
 	return &Gatherer{
 		Resource: &resource.Gather{
-			MetricClient:                  metricclient,
+			MetricsClient:                 metricsclient,
 			PodLister:                     podlister,
 			CPUInitializationPeriod:       cpuInitializationPeriod,
 			DelayOfInitialReadinessStatus: delayOfInitialReadinessStatus,
 		},
 		Pods: &pods.Gather{
-			MetricClient: metricclient,
-			PodLister:    podlister,
+			MetricsClient: metricsclient,
+			PodLister:     podlister,
 		},
 		Object: &object.Gather{
-			MetricClient:    metricclient,
+			MetricsClient:   metricsclient,
 			PodReadyCounter: podReadyCounter,
 		},
 		External: &external.Gather{
-			MetricClient:    metricclient,
+			MetricsClient:   metricsclient,
 			PodReadyCounter: podReadyCounter,
 		},
 	}
@@ -123,7 +123,7 @@ func (c *Gatherer) Gather(specs []autoscalingv2.MetricSpec, namespace string, po
 	var invalidMetricError error
 	invalidMetricsCount := 0
 	for _, spec := range specs {
-		metric, err := c.gather(spec, namespace, podSelector)
+		metric, err := c.GatherSingleMetric(spec, namespace, podSelector)
 		if err != nil {
 			if invalidMetricsCount <= 0 {
 				invalidMetricError = err
@@ -142,7 +142,7 @@ func (c *Gatherer) Gather(specs []autoscalingv2.MetricSpec, namespace string, po
 	return combinedMetrics, nil
 }
 
-func (c *Gatherer) gather(spec autoscalingv2.MetricSpec, namespace string, podSelector labels.Selector) (*metrics.Metric, error) {
+func (c *Gatherer) GatherSingleMetric(spec autoscalingv2.MetricSpec, namespace string, podSelector labels.Selector) (*metrics.Metric, error) {
 	switch spec.Type {
 	case autoscalingv2.ObjectMetricSourceType:
 		metricSelector, err := metav1.LabelSelectorAsSelector(spec.Object.Metric.Selector)

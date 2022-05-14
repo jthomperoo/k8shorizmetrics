@@ -21,8 +21,8 @@ import (
 	"time"
 
 	"github.com/jthomperoo/k8shorizmetrics"
-	"github.com/jthomperoo/k8shorizmetrics/metricclient"
-	"github.com/jthomperoo/k8shorizmetrics/podclient"
+	"github.com/jthomperoo/k8shorizmetrics/metricsclient"
+	"github.com/jthomperoo/k8shorizmetrics/podsclient"
 	"k8s.io/api/autoscaling/v2beta2"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -51,8 +51,8 @@ func main() {
 		log.Fatalf("Fail to set up Kubernetes clientset: %s", err)
 	}
 
-	metricsclient := metricclient.NewClient(clusterConfig, clientset.Discovery())
-	podsclient := &podclient.OnDemandPodLister{
+	metricsclient := metricsclient.NewClient(clusterConfig, clientset.Discovery())
+	podsclient := &podsclient.OnDemandPodLister{
 		Clientset: clientset,
 	}
 	cpuInitializationPeriod := time.Duration(cpuInitializationPeriodSeconds) * time.Second

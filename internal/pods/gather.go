@@ -31,8 +31,8 @@ import (
 	"fmt"
 
 	"github.com/jthomperoo/k8shorizmetrics/internal/podutil"
-	metricclient "github.com/jthomperoo/k8shorizmetrics/metricclient"
 	"github.com/jthomperoo/k8shorizmetrics/metrics/pods"
+	metricsclient "github.com/jthomperoo/k8shorizmetrics/metricsclient"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	corelisters "k8s.io/client-go/listers/core/v1"
@@ -40,14 +40,14 @@ import (
 
 // Gather (Pods) provides functionality for retrieving metrics for pods metric specs.
 type Gather struct {
-	MetricClient metricclient.Client
-	PodLister    corelisters.PodLister
+	MetricsClient metricsclient.Client
+	PodLister     corelisters.PodLister
 }
 
 // Gather retrieves a pods metric
 func (c *Gather) Gather(metricName string, namespace string, podSelector labels.Selector, metricSelector labels.Selector) (*pods.Metric, error) {
 	// Get metrics
-	metrics, timestamp, err := c.MetricClient.GetRawMetric(metricName, namespace, podSelector, metricSelector)
+	metrics, timestamp, err := c.MetricsClient.GetRawMetric(metricName, namespace, podSelector, metricSelector)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get metric %s: %w", metricName, err)
 	}

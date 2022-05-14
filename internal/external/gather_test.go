@@ -26,9 +26,9 @@ import (
 	"github.com/jthomperoo/k8shorizmetrics/internal/fake"
 	"github.com/jthomperoo/k8shorizmetrics/internal/podutil"
 	"github.com/jthomperoo/k8shorizmetrics/internal/testutil"
-	metricclient "github.com/jthomperoo/k8shorizmetrics/metricclient"
 	externalmetrics "github.com/jthomperoo/k8shorizmetrics/metrics/external"
 	"github.com/jthomperoo/k8shorizmetrics/metrics/value"
+	metricsclient "github.com/jthomperoo/k8shorizmetrics/metricsclient"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 )
@@ -45,7 +45,7 @@ func TestGather(t *testing.T) {
 		description     string
 		expected        *externalmetrics.Metric
 		expectedErr     error
-		metricclient    metricclient.Client
+		metricsclient   metricsclient.Client
 		podReadyCounter podutil.PodReadyCounter
 		metricName      string
 		namespace       string
@@ -73,7 +73,7 @@ func TestGather(t *testing.T) {
 			"Fail to get metric",
 			nil,
 			errors.New("unable to get external metric test-namespace/test-metric/nil: fail to get metric"),
-			&fake.MetricClient{
+			&fake.MetricsClient{
 				GetExternalMetricReactor: func(metricName, namespace string, selector labels.Selector) ([]int64, time.Time, error) {
 					return []int64{}, time.Time{}, errors.New("fail to get metric")
 				},
@@ -88,7 +88,7 @@ func TestGather(t *testing.T) {
 			"Fail to get ready pods",
 			nil,
 			errors.New("unable to calculate ready pods: fail to get ready pods"),
-			&fake.MetricClient{
+			&fake.MetricsClient{
 				GetExternalMetricReactor: func(metricName, namespace string, selector labels.Selector) ([]int64, time.Time, error) {
 					return []int64{}, time.Time{}, nil
 				},
@@ -112,7 +112,7 @@ func TestGather(t *testing.T) {
 				},
 			},
 			nil,
-			&fake.MetricClient{
+			&fake.MetricsClient{
 				GetExternalMetricReactor: func(metricName, namespace string, selector labels.Selector) ([]int64, time.Time, error) {
 					return []int64{1, 2, 3, 4, 5}, time.Time{}, nil
 				},
@@ -131,7 +131,7 @@ func TestGather(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.description, func(t *testing.T) {
 			gatherer := &external.Gather{
-				MetricClient:    test.metricclient,
+				MetricsClient:   test.metricsclient,
 				PodReadyCounter: test.podReadyCounter,
 			}
 			metric, err := gatherer.Gather(test.metricName, test.namespace, test.metricSelector, test.podSelector)
@@ -158,7 +158,7 @@ func TestGatherPerPod(t *testing.T) {
 		description     string
 		expected        *externalmetrics.Metric
 		expectedErr     error
-		metricclient    metricclient.Client
+		metricsclient   metricsclient.Client
 		podReadyCounter podutil.PodReadyCounter
 		metricName      string
 		namespace       string
@@ -184,7 +184,7 @@ func TestGatherPerPod(t *testing.T) {
 			"Fail to get metric",
 			nil,
 			errors.New("unable to get external metric test-namespace/test-metric/nil: fail to get metric"),
-			&fake.MetricClient{
+			&fake.MetricsClient{
 				GetExternalMetricReactor: func(metricName, namespace string, selector labels.Selector) ([]int64, time.Time, error) {
 					return []int64{}, time.Time{}, errors.New("fail to get metric")
 				},
@@ -202,7 +202,7 @@ func TestGatherPerPod(t *testing.T) {
 				},
 			},
 			nil,
-			&fake.MetricClient{
+			&fake.MetricsClient{
 				GetExternalMetricReactor: func(metricName, namespace string, selector labels.Selector) ([]int64, time.Time, error) {
 					return []int64{1, 2, 3, 4, 5}, time.Time{}, nil
 				},
@@ -216,7 +216,7 @@ func TestGatherPerPod(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.description, func(t *testing.T) {
 			gatherer := &external.Gather{
-				MetricClient:    test.metricclient,
+				MetricsClient:   test.metricsclient,
 				PodReadyCounter: test.podReadyCounter,
 			}
 			metric, err := gatherer.GatherPerPod(test.metricName, test.namespace, test.metricSelector)

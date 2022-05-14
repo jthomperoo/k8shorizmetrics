@@ -35,13 +35,13 @@ import (
 	"github.com/jthomperoo/k8shorizmetrics/metrics/value"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	metricclient "github.com/jthomperoo/k8shorizmetrics/metricclient"
+	metricsclient "github.com/jthomperoo/k8shorizmetrics/metricsclient"
 	"k8s.io/apimachinery/pkg/labels"
 )
 
 // Gather (External)  provides functionality for retrieving metrics for external metric specs.
 type Gather struct {
-	MetricClient    metricclient.Client
+	MetricsClient   metricsclient.Client
 	PodReadyCounter podutil.PodReadyCounter
 }
 
@@ -54,7 +54,7 @@ func (c *Gather) Gather(metricName, namespace string, metricSelector *metav1.Lab
 	}
 
 	// Get metrics
-	gathered, timestamp, err := c.MetricClient.GetExternalMetric(metricName, namespace, metricLabelSelector)
+	gathered, timestamp, err := c.MetricsClient.GetExternalMetric(metricName, namespace, metricLabelSelector)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get external metric %s/%s/%+v: %w", namespace, metricName, metricSelector, err)
 	}
@@ -87,7 +87,7 @@ func (c *Gather) GatherPerPod(metricName, namespace string, metricSelector *meta
 	}
 
 	// Get metrics
-	gathered, timestamp, err := c.MetricClient.GetExternalMetric(metricName, namespace, metricLabelSelector)
+	gathered, timestamp, err := c.MetricsClient.GetExternalMetric(metricName, namespace, metricLabelSelector)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get external metric %s/%s/%+v: %w", namespace, metricName, metricSelector, err)
 	}

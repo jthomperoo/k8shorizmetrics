@@ -32,8 +32,8 @@ import (
 	"time"
 
 	"github.com/jthomperoo/k8shorizmetrics/internal/podutil"
-	metricclient "github.com/jthomperoo/k8shorizmetrics/metricclient"
 	"github.com/jthomperoo/k8shorizmetrics/metrics/resource"
+	metricsclient "github.com/jthomperoo/k8shorizmetrics/metricsclient"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	corelisters "k8s.io/client-go/listers/core/v1"
@@ -41,7 +41,7 @@ import (
 
 // Gather (Resource) provides functionality for retrieving metrics for resource metric specs.
 type Gather struct {
-	MetricClient                  metricclient.Client
+	MetricsClient                 metricsclient.Client
 	PodLister                     corelisters.PodLister
 	CPUInitializationPeriod       time.Duration
 	DelayOfInitialReadinessStatus time.Duration
@@ -50,7 +50,7 @@ type Gather struct {
 // Gather retrieves a resource metric
 func (c *Gather) Gather(resourceName corev1.ResourceName, namespace string, podSelector labels.Selector) (*resource.Metric, error) {
 	// Get metrics
-	metrics, timestamp, err := c.MetricClient.GetResourceMetric(resourceName, namespace, podSelector)
+	metrics, timestamp, err := c.MetricsClient.GetResourceMetric(resourceName, namespace, podSelector)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get metrics for resource %s: %w", resourceName, err)
 	}
@@ -90,7 +90,7 @@ func (c *Gather) Gather(resourceName corev1.ResourceName, namespace string, podS
 // GatherRaw retrieves a a raw resource metric
 func (c *Gather) GatherRaw(resourceName corev1.ResourceName, namespace string, podSelector labels.Selector) (*resource.Metric, error) {
 	// Get metrics
-	metrics, timestamp, err := c.MetricClient.GetResourceMetric(resourceName, namespace, podSelector)
+	metrics, timestamp, err := c.MetricsClient.GetResourceMetric(resourceName, namespace, podSelector)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get metrics for resource %s: %w", resourceName, err)
 	}

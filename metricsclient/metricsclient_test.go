@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package metricclient_test
+package metricsclient_test
 
 import (
 	"errors"
@@ -23,8 +23,8 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/jthomperoo/k8shorizmetrics/internal/testutil"
-	"github.com/jthomperoo/k8shorizmetrics/metricclient"
 	"github.com/jthomperoo/k8shorizmetrics/metrics/podmetrics"
+	"github.com/jthomperoo/k8shorizmetrics/metricsclient"
 	autoscalingv2 "k8s.io/api/autoscaling/v2beta2"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -53,7 +53,7 @@ func TestGetResourceMetric(t *testing.T) {
 		expectedInfo podmetrics.MetricsInfo
 		expectedTime time.Time
 		expectedErr  error
-		client       metricclient.RESTClient
+		client       metricsclient.RESTClient
 		resource     v1.ResourceName
 		namespace    string
 		selector     labels.Selector
@@ -63,7 +63,7 @@ func TestGetResourceMetric(t *testing.T) {
 			expectedInfo: nil,
 			expectedTime: time.Time{},
 			expectedErr:  errors.New("unable to fetch metrics from resource metrics API: fail to get pod metrics"),
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				Client: &metricsv1beta1fake.FakeMetricsV1beta1{
 					Fake: &k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{
@@ -87,7 +87,7 @@ func TestGetResourceMetric(t *testing.T) {
 			expectedInfo: nil,
 			expectedTime: time.Time{},
 			expectedErr:  errors.New("no metrics returned from resource metrics API"),
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				Client: &metricsv1beta1fake.FakeMetricsV1beta1{
 					Fake: &k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{
@@ -113,7 +113,7 @@ func TestGetResourceMetric(t *testing.T) {
 			expectedInfo: podmetrics.MetricsInfo{},
 			expectedTime: time.Date(1998, 3, 7, 10, 30, 0, 5, time.UTC),
 			expectedErr:  nil,
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				Client: &metricsv1beta1fake.FakeMetricsV1beta1{
 					Fake: &k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{
@@ -145,7 +145,7 @@ func TestGetResourceMetric(t *testing.T) {
 			expectedInfo: podmetrics.MetricsInfo{},
 			expectedTime: time.Date(1998, 3, 7, 10, 30, 0, 5, time.UTC),
 			expectedErr:  nil,
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				Client: &metricsv1beta1fake.FakeMetricsV1beta1{
 					Fake: &k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{
@@ -192,7 +192,7 @@ func TestGetResourceMetric(t *testing.T) {
 			},
 			expectedTime: time.Date(1998, 3, 7, 10, 30, 0, 5, time.UTC),
 			expectedErr:  nil,
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				Client: &metricsv1beta1fake.FakeMetricsV1beta1{
 					Fake: &k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{
@@ -243,7 +243,7 @@ func TestGetResourceMetric(t *testing.T) {
 			},
 			expectedTime: time.Date(1998, 3, 7, 10, 30, 0, 5, time.UTC),
 			expectedErr:  nil,
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				Client: &metricsv1beta1fake.FakeMetricsV1beta1{
 					Fake: &k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{
@@ -342,7 +342,7 @@ func Test_GetRawMetric(t *testing.T) {
 		expectedInfo   podmetrics.MetricsInfo
 		expectedTime   time.Time
 		expectedErr    error
-		client         metricclient.RESTClient
+		client         metricsclient.RESTClient
 		metricName     string
 		namespace      string
 		selector       labels.Selector
@@ -353,7 +353,7 @@ func Test_GetRawMetric(t *testing.T) {
 			expectedInfo: nil,
 			expectedTime: time.Time{},
 			expectedErr:  errors.New("unable to fetch metrics from custom metrics API: fail to get pod metrics"),
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				CustomMetricsClient: &custom_metricsfake.FakeCustomMetricsClient{
 					Fake: k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{
@@ -378,7 +378,7 @@ func Test_GetRawMetric(t *testing.T) {
 			expectedInfo: nil,
 			expectedTime: time.Time{},
 			expectedErr:  errors.New("no metrics returned from custom metrics API"),
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				CustomMetricsClient: &custom_metricsfake.FakeCustomMetricsClient{
 					Fake: k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{
@@ -409,7 +409,7 @@ func Test_GetRawMetric(t *testing.T) {
 			},
 			expectedTime: time.Date(1998, 3, 7, 10, 30, 0, 5, time.UTC),
 			expectedErr:  nil,
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				CustomMetricsClient: &custom_metricsfake.FakeCustomMetricsClient{
 					Fake: k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{
@@ -453,7 +453,7 @@ func Test_GetRawMetric(t *testing.T) {
 			},
 			expectedTime: time.Date(1998, 3, 7, 10, 30, 0, 5, time.UTC),
 			expectedErr:  nil,
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				CustomMetricsClient: &custom_metricsfake.FakeCustomMetricsClient{
 					Fake: k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{
@@ -506,7 +506,7 @@ func Test_GetRawMetric(t *testing.T) {
 			},
 			expectedTime: time.Date(1998, 3, 7, 10, 30, 0, 5, time.UTC),
 			expectedErr:  nil,
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				CustomMetricsClient: &custom_metricsfake.FakeCustomMetricsClient{
 					Fake: k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{
@@ -588,7 +588,7 @@ func Test_GetObjectMetric(t *testing.T) {
 		expectedMetric int64
 		expectedTime   time.Time
 		expectedErr    error
-		client         metricclient.RESTClient
+		client         metricsclient.RESTClient
 		metricName     string
 		namespace      string
 		objectRef      *autoscalingv2.CrossVersionObjectReference
@@ -599,7 +599,7 @@ func Test_GetObjectMetric(t *testing.T) {
 			expectedMetric: 0,
 			expectedTime:   time.Time{},
 			expectedErr:    errors.New("unable to fetch metrics from custom metrics API: fail to get deployment metrics"),
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				CustomMetricsClient: &custom_metricsfake.FakeCustomMetricsClient{
 					Fake: k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{
@@ -628,7 +628,7 @@ func Test_GetObjectMetric(t *testing.T) {
 			expectedMetric: 0,
 			expectedTime:   time.Time{},
 			expectedErr:    errors.New("unable to fetch metrics from custom metrics API: fail to get deployment metrics"),
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				CustomMetricsClient: &custom_metricsfake.FakeCustomMetricsClient{
 					Fake: k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{
@@ -657,7 +657,7 @@ func Test_GetObjectMetric(t *testing.T) {
 			expectedMetric: 10000,
 			expectedTime:   time.Date(1998, 3, 7, 10, 30, 0, 5, time.UTC),
 			expectedErr:    nil,
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				CustomMetricsClient: &custom_metricsfake.FakeCustomMetricsClient{
 					Fake: k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{
@@ -698,7 +698,7 @@ func Test_GetObjectMetric(t *testing.T) {
 			expectedMetric: 10000,
 			expectedTime:   time.Date(1998, 3, 7, 10, 30, 0, 5, time.UTC),
 			expectedErr:    nil,
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				CustomMetricsClient: &custom_metricsfake.FakeCustomMetricsClient{
 					Fake: k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{
@@ -765,7 +765,7 @@ func Test_GetExternalMetric(t *testing.T) {
 		expectedMetrics []int64
 		expectedTime    time.Time
 		expectedErr     error
-		client          metricclient.RESTClient
+		client          metricsclient.RESTClient
 		metricName      string
 		namespace       string
 		selector        labels.Selector
@@ -775,7 +775,7 @@ func Test_GetExternalMetric(t *testing.T) {
 			expectedMetrics: []int64{},
 			expectedTime:    time.Time{},
 			expectedErr:     errors.New("unable to fetch metrics from external metrics API: Fail to get external metrics"),
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				ExternalMetricsClient: &external_metricsfake.FakeExternalMetricsClient{
 					Fake: k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{
@@ -799,7 +799,7 @@ func Test_GetExternalMetric(t *testing.T) {
 			expectedMetrics: nil,
 			expectedTime:    time.Time{},
 			expectedErr:     errors.New("no metrics returned from external metrics API"),
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				ExternalMetricsClient: &external_metricsfake.FakeExternalMetricsClient{
 					Fake: k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{
@@ -823,7 +823,7 @@ func Test_GetExternalMetric(t *testing.T) {
 			expectedMetrics: []int64{10000},
 			expectedTime:    time.Date(1998, 3, 7, 10, 30, 0, 5, time.UTC),
 			expectedErr:     nil,
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				ExternalMetricsClient: &external_metricsfake.FakeExternalMetricsClient{
 					Fake: k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{
@@ -856,7 +856,7 @@ func Test_GetExternalMetric(t *testing.T) {
 			expectedMetrics: []int64{10000, 15000, 20000},
 			expectedTime:    time.Date(1998, 3, 7, 10, 30, 0, 5, time.UTC),
 			expectedErr:     nil,
-			client: metricclient.RESTClient{
+			client: metricsclient.RESTClient{
 				ExternalMetricsClient: &external_metricsfake.FakeExternalMetricsClient{
 					Fake: k8stesting.Fake{
 						ReactionChain: []k8stesting.Reactor{

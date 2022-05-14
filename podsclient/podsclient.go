@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Package podclient provides an on-demand client for retrieving pods, without
+// Package podsclient provides an on-demand client for retrieving pods, without
 // using caching, as the HorizontalPodAutoscaler does.
-package podclient
+package podsclient
 
 import (
 	"context"

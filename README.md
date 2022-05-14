@@ -25,6 +25,66 @@ go get -u github.com/jthomperoo/k8shorizmetrics
 - Splits the HPA into two parts, metric gathering and evaluation, only use what you need.
 - Allows insights into how the HPA makes decisions.
 
+## Quick Start
+
+```go
+package main
+
+import (
+	"log"
+	"time"
+
+	"github.com/jthomperoo/k8shorizmetrics"
+	"github.com/jthomperoo/k8shorizmetrics/metricsclient"
+	"github.com/jthomperoo/k8shorizmetrics/podsclient"
+	"k8s.io/api/autoscaling/v2beta2"
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
+)
+
+func main() {
+    // Kubernetes API setup
+    clusterConfig, _ := rest.InClusterConfig()
+    clientset, _ := kubernetes.NewForConfig(clusterConfig)
+    // Metrics and pods clients setup
+    metricsclient := metricsclient.NewClient(clusterConfig, clientset.Discovery())
+    podsclient := &podsclient.OnDemandPodLister{ Clientset: clientset }
+    // HPA configuration options
+    cpuInitializationPeriod := time.Duration(300) * time.Second
+    initialReadinessDelay := time.Duration(30) * time.Second
+
+    // Setup gatherer
+    gather := k8shorizmetrics.NewGatherer(metricsclient, podsclient, cpuInitializationPeriod, initialReadinessDelay)
+
+    // Target resource values
+    namespace := "default"
+    podSelector := labels.SelectorFromSet(labels.Set{
+        "run": "hello-world",
+    }
+
+    // Metric spec to gather, CPU resource utilization
+    spec := v2beta2.MetricSpec{
+        Type: v2beta2.ResourceMetricSourceType,
+        Resource: &v2beta2.ResourceMetricSource{
+            Name: corev1.ResourceCPU,
+            Target: v2beta2.MetricTarget{
+                Type: v2beta2.UtilizationMetricType,
+            },
+        },
+    }
+
+    metric, _ := gather.GatherSingleMetric(spec, namespace, podSelector)
+
+    for pod, podmetric := range metric.Resource.PodMetricsInfo {
+        actualCPU := podmetric.Value
+        requestedCPU := metric.Resource.Requests[pod]
+        log.Printf("Pod: %s, CPU usage: %dm (%0.2f%% of requested)\n", pod, actualCPU, float64(actualCPU)/float64(requestedCPU)*100.0)
+    }
+}
+```
+
 ## Examples
 
 See the [examples directory](./examples/) for some examples, [cpuprint](./examples/cpuprint/) is a good start.

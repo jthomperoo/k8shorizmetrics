@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package podclient_test
+package podsclient_test
 
 import (
 	"errors"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/jthomperoo/k8shorizmetrics/podclient"
+	"github.com/jthomperoo/k8shorizmetrics/podsclient"
 	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -150,7 +150,7 @@ func TestOnDemandPodLister_List(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.description, func(t *testing.T) {
-			gatherer := &podclient.OnDemandPodLister{
+			gatherer := &podsclient.OnDemandPodLister{
 				Clientset: test.clientset,
 			}
 			pods, err := gatherer.List(test.selector)
@@ -168,13 +168,13 @@ func TestOnDemandPodLister_List(t *testing.T) {
 func TestOnDemandPodLister_Pods(t *testing.T) {
 	var tests = []struct {
 		description string
-		expected    *podclient.OnDemandPodNamespaceLister
+		expected    *podsclient.OnDemandPodNamespaceLister
 		clientset   kubernetes.Interface
 		namespace   string
 	}{
 		{
 			"Success get namespaced pod lister",
-			&podclient.OnDemandPodNamespaceLister{
+			&podsclient.OnDemandPodNamespaceLister{
 				Namespace: "test-namespace",
 				Clientset: nil,
 			},
@@ -184,7 +184,7 @@ func TestOnDemandPodLister_Pods(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.description, func(t *testing.T) {
-			gatherer := &podclient.OnDemandPodLister{
+			gatherer := &podsclient.OnDemandPodLister{
 				Clientset: test.clientset,
 			}
 			namespaceLister := gatherer.Pods(test.namespace)
@@ -305,7 +305,7 @@ func TestOnDemandPodNamespaceLister_List(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.description, func(t *testing.T) {
-			gatherer := &podclient.OnDemandPodNamespaceLister{
+			gatherer := &podsclient.OnDemandPodNamespaceLister{
 				Namespace: test.namespace,
 				Clientset: test.clientset,
 			}
@@ -385,7 +385,7 @@ func TestOnDemandPodNamespaceLister_Get(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.description, func(t *testing.T) {
-			gatherer := &podclient.OnDemandPodNamespaceLister{
+			gatherer := &podsclient.OnDemandPodNamespaceLister{
 				Namespace: test.namespace,
 				Clientset: test.clientset,
 			}
