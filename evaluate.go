@@ -91,7 +91,7 @@ func NewEvaluator(tolerance float64) *Evaluator {
 	}
 }
 
-// Evaluate takes in metrics and outputs an evaluation decision
+// Evaluate returns the target replica count for an array of multiple metrics
 func (e *Evaluator) Evaluate(gatheredMetrics []*metrics.Metric, currentReplicas int32) (int32, error) {
 	var evaluation int32
 	var invalidEvaluationError error
@@ -122,6 +122,7 @@ func (e *Evaluator) Evaluate(gatheredMetrics []*metrics.Metric, currentReplicas 
 	return evaluation, nil
 }
 
+// EvaluateSingleMetric returns the target replica count for a single metrics
 func (e *Evaluator) EvaluateSingleMetric(gatheredMetric *metrics.Metric, currentReplicas int32) (int32, error) {
 	switch gatheredMetric.Spec.Type {
 	case autoscalingv2.ObjectMetricSourceType:

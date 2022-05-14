@@ -116,8 +116,7 @@ func NewGatherer(
 	}
 }
 
-// Gather processes each MetricSpec provided, calculating metric values for each and combining them into a slice before returning them.
-// Error will only be returned if all metrics are invalid, otherwise it will return the valid metrics.
+// Gather returns all of the metrics gathered based on the metric specs provided.
 func (c *Gatherer) Gather(specs []autoscalingv2.MetricSpec, namespace string, podSelector labels.Selector) ([]*metrics.Metric, error) {
 	var combinedMetrics []*metrics.Metric
 	var invalidMetricError error
@@ -142,6 +141,7 @@ func (c *Gatherer) Gather(specs []autoscalingv2.MetricSpec, namespace string, po
 	return combinedMetrics, nil
 }
 
+// GatherSingleMetric returns the metric gathered based on a single metric spec.
 func (c *Gatherer) GatherSingleMetric(spec autoscalingv2.MetricSpec, namespace string, podSelector labels.Selector) (*metrics.Metric, error) {
 	switch spec.Type {
 	case autoscalingv2.ObjectMetricSourceType:
