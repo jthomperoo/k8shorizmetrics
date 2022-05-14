@@ -80,15 +80,13 @@ func main() {
 	// 	   target:
 	// 	     type: Utilization
 	// 	     averageUtilization: 50
-	specs := []v2beta2.MetricSpec{
-		{
-			Type: v2beta2.ResourceMetricSourceType,
-			Resource: &v2beta2.ResourceMetricSource{
-				Name: corev1.ResourceCPU,
-				Target: v2beta2.MetricTarget{
-					Type:               v2beta2.UtilizationMetricType,
-					AverageUtilization: &targetAverageUtilization,
-				},
+	spec := v2beta2.MetricSpec{
+		Type: v2beta2.ResourceMetricSourceType,
+		Resource: &v2beta2.ResourceMetricSource{
+			Name: corev1.ResourceCPU,
+			Target: v2beta2.MetricTarget{
+				Type:               v2beta2.UtilizationMetricType,
+				AverageUtilization: &targetAverageUtilization,
 			},
 		},
 	}
@@ -97,20 +95,15 @@ func main() {
 	for {
 		time.Sleep(5 * time.Second)
 
-		// Gather the metrics using the specs, targeting the namespace and pod selector defined above
-		metrics, err := gather.Gather(specs, namespace, podMatchSelector)
+		// Gather the metrics using the spec, targeting the namespace and pod selector defined above
+		metric, err := gather.GatherSingleMetric(spec, namespace, podMatchSelector)
 		if err != nil {
 			log.Println(err)
 			continue
 		}
 
-		if len(metrics) != 1 {
-			log.Printf("Expected 1 metric returned, got %d, skipping...\n", len(metrics))
-		}
-
 		log.Println("CPU statistics:")
 
-		metric := metrics[0]
 		for pod, podmetric := range metric.Resource.PodMetricsInfo {
 			actualCPU := podmetric.Value
 			requestedCPU := metric.Resource.Requests[pod]
@@ -127,9 +120,9 @@ func main() {
 
 		currentReplicaCount := scale.Spec.Replicas
 
-		// Calculate the target number of replicas that the HPA would scale to based on the metrics provided, current
+		// Calculate the target number of replicas that the HPA would scale to based on the metric provided, current
 		// replicas, and the tolerance configuration value provided
-		targetReplicaCount, err := evaluator.Evaluate(metrics, scale.Spec.Replicas)
+		targetReplicaCount, err := evaluator.EvaluateSingleMetric(metric, scale.Spec.Replicas)
 		if err != nil {
 			log.Println(err)
 			continue

@@ -70,14 +70,12 @@ func main() {
 	// 	   name: cpu
 	// 	   target:
 	// 	     type: Utilization
-	specs := []v2beta2.MetricSpec{
-		{
-			Type: v2beta2.ResourceMetricSourceType,
-			Resource: &v2beta2.ResourceMetricSource{
-				Name: corev1.ResourceCPU,
-				Target: v2beta2.MetricTarget{
-					Type: v2beta2.UtilizationMetricType,
-				},
+	spec := v2beta2.MetricSpec{
+		Type: v2beta2.ResourceMetricSourceType,
+		Resource: &v2beta2.ResourceMetricSource{
+			Name: corev1.ResourceCPU,
+			Target: v2beta2.MetricTarget{
+				Type: v2beta2.UtilizationMetricType,
 			},
 		},
 	}
@@ -87,19 +85,14 @@ func main() {
 		time.Sleep(5 * time.Second)
 
 		// Gather the metrics using the specs, targeting the namespace and pod selector defined above
-		metrics, err := gather.Gather(specs, namespace, podMatchSelector)
+		metric, err := gather.GatherSingleMetric(spec, namespace, podMatchSelector)
 		if err != nil {
 			log.Println(err)
 			continue
 		}
 
-		if len(metrics) != 1 {
-			log.Printf("Expected 1 metric returned, got %d, skipping...\n", len(metrics))
-		}
-
 		log.Println("CPU statistics:")
 
-		metric := metrics[0]
 		for pod, podmetric := range metric.Resource.PodMetricsInfo {
 			actualCPU := podmetric.Value
 			requestedCPU := metric.Resource.Requests[pod]

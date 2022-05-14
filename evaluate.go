@@ -98,7 +98,7 @@ func (e *Evaluator) Evaluate(gatheredMetrics []*metrics.Metric, currentReplicas 
 	invalidEvaluationsCount := 0
 
 	for i, gatheredMetric := range gatheredMetrics {
-		proposedEvaluation, err := e.getCalculation(currentReplicas, gatheredMetric)
+		proposedEvaluation, err := e.EvaluateSingleMetric(gatheredMetric, currentReplicas)
 		if err != nil {
 			if invalidEvaluationsCount <= 0 {
 				invalidEvaluationError = err
@@ -122,7 +122,7 @@ func (e *Evaluator) Evaluate(gatheredMetrics []*metrics.Metric, currentReplicas 
 	return evaluation, nil
 }
 
-func (e *Evaluator) getCalculation(currentReplicas int32, gatheredMetric *metrics.Metric) (int32, error) {
+func (e *Evaluator) EvaluateSingleMetric(gatheredMetric *metrics.Metric, currentReplicas int32) (int32, error) {
 	switch gatheredMetric.Spec.Type {
 	case autoscalingv2.ObjectMetricSourceType:
 		return e.Object.Evaluate(currentReplicas, gatheredMetric)
