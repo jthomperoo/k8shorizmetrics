@@ -38,17 +38,16 @@ import (
 // Evaluate (external) calculates a replica count evaluation, using the tolerance and calculater provided
 type Evaluate struct {
 	Calculater replicas.Calculator
-	Tolerance  float64
 }
 
 // Evaluate calculates an evaluation based on the metric provided and the current number of replicas
-func (e *Evaluate) Evaluate(currentReplicas int32, gatheredMetric *metrics.Metric) (int32, error) {
+func (e *Evaluate) Evaluate(currentReplicas int32, gatheredMetric *metrics.Metric, tolerance float64) (int32, error) {
 	if gatheredMetric.Spec.External.Target.AverageValue != nil {
 		utilization := float64(*gatheredMetric.External.Current.AverageValue)
 		targetUtilizationPerPod := gatheredMetric.Spec.External.Target.AverageValue.MilliValue()
 		replicaCount := currentReplicas
 		usageRatio := float64(utilization) / (float64(targetUtilizationPerPod) * float64(replicaCount))
-		if math.Abs(1.0-usageRatio) > e.Tolerance {
+		if math.Abs(1.0-usageRatio) > tolerance {
 			// update number of replicas if the change is large enough
 			replicaCount = int32(math.Ceil(float64(utilization) / float64(targetUtilizationPerPod)))
 		}

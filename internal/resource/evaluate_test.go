@@ -387,9 +387,8 @@ func TestEvaluate(t *testing.T) {
 		t.Run(test.description, func(t *testing.T) {
 			evaluater := resource.Evaluate{
 				Calculater: test.calculater,
-				Tolerance:  test.tolerance,
 			}
-			evaluation, err := evaluater.Evaluate(test.currentReplicas, test.gatheredMetric)
+			evaluation, err := evaluater.Evaluate(test.currentReplicas, test.gatheredMetric, test.tolerance)
 			if !cmp.Equal(&err, &test.expectedErr, equateErrorMessage) {
 				t.Errorf("error mismatch (-want +got):\n%s", cmp.Diff(test.expectedErr, err, equateErrorMessage))
 				return

@@ -8,7 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - New `GatherWithOptions` and `GatherSingleMetricWithOptions` methods which allow you to provide the CPU initialization
 and delay of initial readiness status at call time as parameters.
+- New `EvaluateWithOptions` and `EvaluateSingleMetricWithOptions` methods which allow you to provide the tolerance at
+call time as a parameter.
 - `CPUInitializationPeriod` and `DelayOfInitialReadinessStatus` now exposed as member variables of the `Gatherer`.
+- `Tolerance` now exposed as a member variable of the `Evaluator`.
 
 ## [v1.0.0] - 2022-05-14
 ### Added
