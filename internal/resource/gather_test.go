@@ -398,12 +398,10 @@ func TestGather(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.description, func(t *testing.T) {
 			gatherer := &resource.Gather{
-				MetricsClient:                 test.metricsclient,
-				PodLister:                     test.podLister,
-				CPUInitializationPeriod:       test.cpuInitializationPeriod,
-				DelayOfInitialReadinessStatus: test.delayOfInitialReadinessStatus,
+				MetricsClient: test.metricsclient,
+				PodLister:     test.podLister,
 			}
-			metric, err := gatherer.Gather(test.resourceName, test.namespace, test.selector)
+			metric, err := gatherer.Gather(test.resourceName, test.namespace, test.selector, test.cpuInitializationPeriod, test.delayOfInitialReadinessStatus)
 			if !cmp.Equal(&err, &test.expectedErr, equateErrorMessage) {
 				t.Errorf("error mismatch (-want +got):\n%s", cmp.Diff(test.expectedErr, err, equateErrorMessage))
 				return
@@ -725,12 +723,10 @@ func TestGatherRaw(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.description, func(t *testing.T) {
 			gatherer := &resource.Gather{
-				MetricsClient:                 test.metricsclient,
-				PodLister:                     test.podLister,
-				CPUInitializationPeriod:       test.cpuInitializationPeriod,
-				DelayOfInitialReadinessStatus: test.delayOfInitialReadinessStatus,
+				MetricsClient: test.metricsclient,
+				PodLister:     test.podLister,
 			}
-			metric, err := gatherer.GatherRaw(test.resourceName, test.namespace, test.selector)
+			metric, err := gatherer.GatherRaw(test.resourceName, test.namespace, test.selector, test.cpuInitializationPeriod, test.delayOfInitialReadinessStatus)
 			if !cmp.Equal(&err, &test.expectedErr, equateErrorMessage) {
 				t.Errorf("error mismatch (-want +got):\n%s", cmp.Diff(test.expectedErr, err, equateErrorMessage))
 				return
