@@ -69,17 +69,21 @@ type PodsGatherer interface {
 
 // ResourceGatherer allows retrieval of resource metrics.
 type ResourceGatherer interface {
-	Gather(resourceName corev1.ResourceName, namespace string, podSelector labels.Selector) (*resourcemetrics.Metric, error)
-	GatherRaw(resourceName corev1.ResourceName, namespace string, podSelector labels.Selector) (*resourcemetrics.Metric, error)
+	Gather(resourceName corev1.ResourceName, namespace string, podSelector labels.Selector,
+		cpuInitializationPeriod time.Duration, delayOfInitialReadinessStatus time.Duration) (*resourcemetrics.Metric, error)
+	GatherRaw(resourceName corev1.ResourceName, namespace string, podSelector labels.Selector,
+		cpuInitializationPeriod time.Duration, delayOfInitialReadinessStatus time.Duration) (*resourcemetrics.Metric, error)
 }
 
 // Gatherer provides functionality for retrieving metrics on supplied metric specs.
 type Gatherer struct {
-	Resource    ResourceGatherer
-	Pods        PodsGatherer
-	Object      ObjectGatherer
-	External    ExternalGatherer
-	ScaleClient k8sscale.ScalesGetter
+	Resource                      ResourceGatherer
+	Pods                          PodsGatherer
+	Object                        ObjectGatherer
+	External                      ExternalGatherer
+	ScaleClient                   k8sscale.ScalesGetter
+	CPUInitializationPeriod       time.Duration
+	DelayOfInitialReadinessStatus time.Duration
 }
 
 // NewGatherer sets up a new Metric Gatherer
@@ -96,10 +100,8 @@ func NewGatherer(
 
 	return &Gatherer{
 		Resource: &resource.Gather{
-			MetricsClient:                 metricsclient,
-			PodLister:                     podlister,
-			CPUInitializationPeriod:       cpuInitializationPeriod,
-			DelayOfInitialReadinessStatus: delayOfInitialReadinessStatus,
+			MetricsClient: metricsclient,
+			PodLister:     podlister,
 		},
 		Pods: &pods.Gather{
 			MetricsClient: metricsclient,
@@ -113,16 +115,23 @@ func NewGatherer(
 			MetricsClient:   metricsclient,
 			PodReadyCounter: podReadyCounter,
 		},
+		CPUInitializationPeriod:       cpuInitializationPeriod,
+		DelayOfInitialReadinessStatus: delayOfInitialReadinessStatus,
 	}
 }
 
-// Gather returns all of the metrics gathered based on the metric specs provided.
 func (c *Gatherer) Gather(specs []autoscalingv2.MetricSpec, namespace string, podSelector labels.Selector) ([]*metrics.Metric, error) {
+	return c.GatherWithOptions(specs, namespace, podSelector, c.CPUInitializationPeriod, c.DelayOfInitialReadinessStatus)
+}
+
+// Gather returns all of the metrics gathered based on the metric specs provided.
+func (c *Gatherer) GatherWithOptions(specs []autoscalingv2.MetricSpec, namespace string, podSelector labels.Selector,
+	cpuInitializationPeriod time.Duration, delayOfInitialReadinessStatus time.Duration) ([]*metrics.Metric, error) {
 	var combinedMetrics []*metrics.Metric
 	var invalidMetricError error
 	invalidMetricsCount := 0
 	for _, spec := range specs {
-		metric, err := c.GatherSingleMetric(spec, namespace, podSelector)
+		metric, err := c.GatherSingleMetricWithOptions(spec, namespace, podSelector, cpuInitializationPeriod, delayOfInitialReadinessStatus)
 		if err != nil {
 			if invalidMetricsCount <= 0 {
 				invalidMetricError = err
@@ -141,8 +150,13 @@ func (c *Gatherer) Gather(specs []autoscalingv2.MetricSpec, namespace string, po
 	return combinedMetrics, nil
 }
 
-// GatherSingleMetric returns the metric gathered based on a single metric spec.
 func (c *Gatherer) GatherSingleMetric(spec autoscalingv2.MetricSpec, namespace string, podSelector labels.Selector) (*metrics.Metric, error) {
+	return c.GatherSingleMetricWithOptions(spec, namespace, podSelector, c.CPUInitializationPeriod, c.DelayOfInitialReadinessStatus)
+}
+
+// GatherSingleMetric returns the metric gathered based on a single metric spec.
+func (c *Gatherer) GatherSingleMetricWithOptions(spec autoscalingv2.MetricSpec, namespace string, podSelector labels.Selector,
+	cpuInitializationPeriod time.Duration, delayOfInitialReadinessStatus time.Duration) (*metrics.Metric, error) {
 	switch spec.Type {
 	case autoscalingv2.ObjectMetricSourceType:
 		metricSelector, err := metav1.LabelSelectorAsSelector(spec.Object.Metric.Selector)
@@ -193,7 +207,7 @@ func (c *Gatherer) GatherSingleMetric(spec autoscalingv2.MetricSpec, namespace s
 	case autoscalingv2.ResourceMetricSourceType:
 		switch spec.Resource.Target.Type {
 		case autoscalingv2.AverageValueMetricType:
-			resourceMetric, err := c.Resource.GatherRaw(spec.Resource.Name, namespace, podSelector)
+			resourceMetric, err := c.Resource.GatherRaw(spec.Resource.Name, namespace, podSelector, cpuInitializationPeriod, delayOfInitialReadinessStatus)
 			if err != nil {
 				return nil, fmt.Errorf("failed to get resource metric: %w", err)
 			}
@@ -202,7 +216,7 @@ func (c *Gatherer) GatherSingleMetric(spec autoscalingv2.MetricSpec, namespace s
 				Resource: resourceMetric,
 			}, nil
 		case autoscalingv2.UtilizationMetricType:
-			resourceMetric, err := c.Resource.Gather(spec.Resource.Name, namespace, podSelector)
+			resourceMetric, err := c.Resource.Gather(spec.Resource.Name, namespace, podSelector, cpuInitializationPeriod, delayOfInitialReadinessStatus)
 			if err != nil {
 				return nil, fmt.Errorf("failed to get resource metric: %w", err)
 			}

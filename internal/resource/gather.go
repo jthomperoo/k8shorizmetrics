@@ -41,14 +41,13 @@ import (
 
 // Gather (Resource) provides functionality for retrieving metrics for resource metric specs.
 type Gather struct {
-	MetricsClient                 metricsclient.Client
-	PodLister                     corelisters.PodLister
-	CPUInitializationPeriod       time.Duration
-	DelayOfInitialReadinessStatus time.Duration
+	MetricsClient metricsclient.Client
+	PodLister     corelisters.PodLister
 }
 
 // Gather retrieves a resource metric
-func (c *Gather) Gather(resourceName corev1.ResourceName, namespace string, podSelector labels.Selector) (*resource.Metric, error) {
+func (c *Gather) Gather(resourceName corev1.ResourceName, namespace string, podSelector labels.Selector,
+	cpuInitializationPeriod time.Duration, delayOfInitialReadinessStatus time.Duration) (*resource.Metric, error) {
 	// Get metrics
 	metrics, timestamp, err := c.MetricsClient.GetResourceMetric(resourceName, namespace, podSelector)
 	if err != nil {
@@ -67,7 +66,7 @@ func (c *Gather) Gather(resourceName corev1.ResourceName, namespace string, podS
 	}
 
 	// Remove missing pod metrics
-	readyPodCount, ignoredPods, missingPods := podutil.GroupPods(podList, metrics, resourceName, c.CPUInitializationPeriod, c.DelayOfInitialReadinessStatus)
+	readyPodCount, ignoredPods, missingPods := podutil.GroupPods(podList, metrics, resourceName, cpuInitializationPeriod, delayOfInitialReadinessStatus)
 	podutil.RemoveMetricsForPods(metrics, ignoredPods)
 
 	// Calculate requests - limits for pod resources
@@ -88,7 +87,8 @@ func (c *Gather) Gather(resourceName corev1.ResourceName, namespace string, podS
 }
 
 // GatherRaw retrieves a a raw resource metric
-func (c *Gather) GatherRaw(resourceName corev1.ResourceName, namespace string, podSelector labels.Selector) (*resource.Metric, error) {
+func (c *Gather) GatherRaw(resourceName corev1.ResourceName, namespace string, podSelector labels.Selector,
+	cpuInitializationPeriod time.Duration, delayOfInitialReadinessStatus time.Duration) (*resource.Metric, error) {
 	// Get metrics
 	metrics, timestamp, err := c.MetricsClient.GetResourceMetric(resourceName, namespace, podSelector)
 	if err != nil {
@@ -107,7 +107,7 @@ func (c *Gather) GatherRaw(resourceName corev1.ResourceName, namespace string, p
 	}
 
 	// Remove missing pod metrics
-	readyPodCount, ignoredPods, missingPods := podutil.GroupPods(podList, metrics, resourceName, c.CPUInitializationPeriod, c.DelayOfInitialReadinessStatus)
+	readyPodCount, ignoredPods, missingPods := podutil.GroupPods(podList, metrics, resourceName, cpuInitializationPeriod, delayOfInitialReadinessStatus)
 	podutil.RemoveMetricsForPods(metrics, ignoredPods)
 
 	return &resource.Metric{
