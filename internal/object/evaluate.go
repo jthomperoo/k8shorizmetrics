@@ -39,11 +39,10 @@ import (
 // Evaluate (object) calculates a replica count evaluation, using the tolerance and calculater provided
 type Evaluate struct {
 	Calculater replicas.Calculator
-	Tolerance  float64
 }
 
 // Evaluate calculates an evaluation based on the metric provided and the current number of replicas
-func (e *Evaluate) Evaluate(currentReplicas int32, gatheredMetric *metrics.Metric) (int32, error) {
+func (e *Evaluate) Evaluate(currentReplicas int32, gatheredMetric *metrics.Metric, tolerance float64) (int32, error) {
 	if gatheredMetric.Spec.Object.Target.Type == autoscaling.ValueMetricType {
 		utilization := float64(*gatheredMetric.Object.Current.Value)
 		usageRatio := float64(utilization) / float64(gatheredMetric.Spec.Object.Target.Value.MilliValue())
@@ -54,7 +53,7 @@ func (e *Evaluate) Evaluate(currentReplicas int32, gatheredMetric *metrics.Metri
 		utilization := float64(*gatheredMetric.Object.Current.AverageValue)
 		replicaCount := currentReplicas
 		usageRatio := utilization / (float64(gatheredMetric.Spec.Object.Target.AverageValue.MilliValue()) * float64(replicaCount))
-		if math.Abs(1.0-usageRatio) > e.Tolerance {
+		if math.Abs(1.0-usageRatio) > tolerance {
 			// update number of replicas if change is large enough
 			replicaCount = int32(math.Ceil(utilization / float64(gatheredMetric.Spec.Object.Target.AverageValue.MilliValue())))
 		}

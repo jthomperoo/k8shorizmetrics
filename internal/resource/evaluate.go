@@ -40,11 +40,10 @@ import (
 // Evaluate (resource) calculates a replica count evaluation, using the tolerance and calculater provided
 type Evaluate struct {
 	Calculater replicas.Calculator
-	Tolerance  float64
 }
 
 // Evaluate calculates an evaluation based on the metric provided and the current number of replicas
-func (e *Evaluate) Evaluate(currentReplicas int32, gatheredMetric *metrics.Metric) (int32, error) {
+func (e *Evaluate) Evaluate(currentReplicas int32, gatheredMetric *metrics.Metric, tolerance float64) (int32, error) {
 	if gatheredMetric.Spec.Resource.Target.AverageValue != nil {
 		replicaCount := e.Calculater.GetPlainMetricReplicaCount(
 			gatheredMetric.Resource.PodMetricsInfo,
@@ -78,7 +77,7 @@ func (e *Evaluate) Evaluate(currentReplicas int32, gatheredMetric *metrics.Metri
 
 		rebalanceIgnored := len(ignoredPods) > 0 && usageRatio > 1.0
 		if !rebalanceIgnored && len(missingPods) == 0 {
-			if math.Abs(1.0-usageRatio) <= e.Tolerance {
+			if math.Abs(1.0-usageRatio) <= tolerance {
 				// return the current replicas if the change would be too small
 				return currentReplicas, nil
 			}
@@ -115,7 +114,7 @@ func (e *Evaluate) Evaluate(currentReplicas int32, gatheredMetric *metrics.Metri
 			return 0, err
 		}
 
-		if math.Abs(1.0-newUsageRatio) <= e.Tolerance || (usageRatio < 1.0 && newUsageRatio > 1.0) || (usageRatio > 1.0 && newUsageRatio < 1.0) {
+		if math.Abs(1.0-newUsageRatio) <= tolerance || (usageRatio < 1.0 && newUsageRatio > 1.0) || (usageRatio > 1.0 && newUsageRatio < 1.0) {
 			// return the current replicas if the change would be too small,
 			// or if the new usage ratio would cause a change in scale direction
 			return currentReplicas, nil
