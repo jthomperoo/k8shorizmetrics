@@ -10,6 +10,8 @@ format:
 	@echo "=============Formatting============="
 	gofmt -s -w .
 	go mod tidy
+	cd examples/cpureplicaprint && go mod tidy && gofmt -s -w .
+	cd examples/cpuprint && go mod tidy && gofmt -s -w .
 
 doc:
 	@echo "=============Serving docs============="
