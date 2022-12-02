@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- **BREAKING CHANGE** Upgraded from Kubernetes `autoscaling/v2beta2` to the graduated `autoscaling/v2`. This drops
+support for Kubernetes versions `v1.22` and below.
+- **BREAKING CHANGE** Changed module path from `github.com/jthomperoo/k8shorizmetrics` to
+`github.com/jthomperoo/k8shorizmetrics/v2`.
+- Upgraded to Kubernetes client libaries `v0.25.4` to support Kubernetes `v1.23+`.
+- Upgraded to Go `v1.19`.
+
 
 ## [v1.1.0] - 2022-12-02
 ### Added

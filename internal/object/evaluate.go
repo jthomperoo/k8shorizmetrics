@@ -31,9 +31,9 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/jthomperoo/k8shorizmetrics/internal/replicas"
-	"github.com/jthomperoo/k8shorizmetrics/metrics"
-	autoscaling "k8s.io/api/autoscaling/v2beta2"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/replicas"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics"
+	autoscaling "k8s.io/api/autoscaling/v2"
 )
 
 // Evaluate (object) calculates a replica count evaluation, using the tolerance and calculater provided

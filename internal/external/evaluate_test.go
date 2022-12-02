@@ -21,14 +21,14 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/jthomperoo/k8shorizmetrics/internal/external"
-	"github.com/jthomperoo/k8shorizmetrics/internal/fake"
-	"github.com/jthomperoo/k8shorizmetrics/internal/replicas"
-	"github.com/jthomperoo/k8shorizmetrics/internal/testutil"
-	"github.com/jthomperoo/k8shorizmetrics/metrics"
-	externalmetrics "github.com/jthomperoo/k8shorizmetrics/metrics/external"
-	"github.com/jthomperoo/k8shorizmetrics/metrics/value"
-	"k8s.io/api/autoscaling/v2beta2"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/external"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/fake"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/replicas"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/testutil"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics"
+	externalmetrics "github.com/jthomperoo/k8shorizmetrics/v2/metrics/external"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/value"
+	v2 "k8s.io/api/autoscaling/v2"
 	"k8s.io/apimachinery/pkg/api/resource"
 )
 
@@ -57,8 +57,8 @@ func TestEvaluate(t *testing.T) {
 			0,
 			3,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					External: &v2beta2.ExternalMetricSource{},
+				Spec: v2.MetricSpec{
+					External: &v2.ExternalMetricSource{},
 				},
 			},
 		},
@@ -70,9 +70,9 @@ func TestEvaluate(t *testing.T) {
 			0,
 			5,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					External: &v2beta2.ExternalMetricSource{
-						Target: v2beta2.MetricTarget{
+				Spec: v2.MetricSpec{
+					External: &v2.ExternalMetricSource{
+						Target: v2.MetricTarget{
 							AverageValue: resource.NewMilliQuantity(50, resource.DecimalSI),
 						},
 					},
@@ -92,9 +92,9 @@ func TestEvaluate(t *testing.T) {
 			0,
 			5,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					External: &v2beta2.ExternalMetricSource{
-						Target: v2beta2.MetricTarget{
+				Spec: v2.MetricSpec{
+					External: &v2.ExternalMetricSource{
+						Target: v2.MetricTarget{
 							AverageValue: resource.NewMilliQuantity(50, resource.DecimalSI),
 						},
 					},
@@ -118,9 +118,9 @@ func TestEvaluate(t *testing.T) {
 			0,
 			5,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					External: &v2beta2.ExternalMetricSource{
-						Target: v2beta2.MetricTarget{
+				Spec: v2.MetricSpec{
+					External: &v2.ExternalMetricSource{
+						Target: v2.MetricTarget{
 							Value: resource.NewMilliQuantity(50, resource.DecimalSI),
 						},
 					},

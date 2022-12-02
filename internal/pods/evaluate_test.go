@@ -20,13 +20,13 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/jthomperoo/k8shorizmetrics/internal/fake"
-	"github.com/jthomperoo/k8shorizmetrics/internal/pods"
-	"github.com/jthomperoo/k8shorizmetrics/internal/replicas"
-	"github.com/jthomperoo/k8shorizmetrics/metrics"
-	"github.com/jthomperoo/k8shorizmetrics/metrics/podmetrics"
-	metricspods "github.com/jthomperoo/k8shorizmetrics/metrics/pods"
-	"k8s.io/api/autoscaling/v2beta2"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/fake"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/pods"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/replicas"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/podmetrics"
+	metricspods "github.com/jthomperoo/k8shorizmetrics/v2/metrics/pods"
+	v2 "k8s.io/api/autoscaling/v2"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/util/sets"
 )
@@ -49,9 +49,9 @@ func TestEvaluate(t *testing.T) {
 			},
 			4,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					Pods: &v2beta2.PodsMetricSource{
-						Target: v2beta2.MetricTarget{
+				Spec: v2.MetricSpec{
+					Pods: &v2.PodsMetricSource{
+						Target: v2.MetricTarget{
 							AverageValue: resource.NewMilliQuantity(50, resource.DecimalSI),
 						},
 					},

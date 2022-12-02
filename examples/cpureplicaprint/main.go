@@ -21,10 +21,10 @@ import (
 	"log"
 	"time"
 
-	"github.com/jthomperoo/k8shorizmetrics"
-	"github.com/jthomperoo/k8shorizmetrics/metricsclient"
-	"github.com/jthomperoo/k8shorizmetrics/podsclient"
-	"k8s.io/api/autoscaling/v2beta2"
+	"github.com/jthomperoo/k8shorizmetrics/v2"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metricsclient"
+	"github.com/jthomperoo/k8shorizmetrics/v2/podsclient"
+	v2 "k8s.io/api/autoscaling/v2"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -80,12 +80,12 @@ func main() {
 	// 	   target:
 	// 	     type: Utilization
 	// 	     averageUtilization: 50
-	spec := v2beta2.MetricSpec{
-		Type: v2beta2.ResourceMetricSourceType,
-		Resource: &v2beta2.ResourceMetricSource{
+	spec := v2.MetricSpec{
+		Type: v2.ResourceMetricSourceType,
+		Resource: &v2.ResourceMetricSource{
 			Name: corev1.ResourceCPU,
-			Target: v2beta2.MetricTarget{
-				Type:               v2beta2.UtilizationMetricType,
+			Target: v2.MetricTarget{
+				Type:               v2.UtilizationMetricType,
 				AverageUtilization: &targetAverageUtilization,
 			},
 		},

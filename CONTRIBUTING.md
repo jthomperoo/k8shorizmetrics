@@ -134,19 +134,13 @@ the other projects that solved it better and which could serve as inspiration.
 
 Developing this project requires these dependencies:
 
-* [Go v1.17+](https://go.dev/doc/install)
-* [staticcheck v0.3.0 (2022.1)](https://staticcheck.io/docs/getting-started/)
+* [Go v1.19+](https://go.dev/doc/install)
+* [staticcheck v0.3.3 (2022.1.3)](https://staticcheck.io/docs/getting-started/)
 * [Docker](https://docs.docker.com/install/)
 
 To view the docs, you need Python 3 installed:
 
 * [Python](https://www.python.org/downloads/) >= `3.8`
-
-To view docs locally you need some Python dependencies, run:
-
-```bash
-pip install -r docs/requirements.txt
-```
 
 It is recommended to test locally using a local Kubernetes managment system, such as
 [k3d](https://github.com/rancher/k3d) (allows running a small Kubernetes cluster locally using Docker).
@@ -157,7 +151,6 @@ It is recommended to test locally using a local Kubernetes managment system, suc
 * `make lint` - lints the code.
 * `make format` - formats the code, must be run to pass the CI.
 * `make view_coverage` - opens up any generated coverage reports in the browser.
-* `make doc` - hosts the documentation locally, at `127.0.0.1:8000`.
 
 ## Styleguides
 

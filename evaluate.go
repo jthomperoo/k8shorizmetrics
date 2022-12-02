@@ -30,13 +30,13 @@ package k8shorizmetrics
 import (
 	"fmt"
 
-	"github.com/jthomperoo/k8shorizmetrics/internal/external"
-	"github.com/jthomperoo/k8shorizmetrics/internal/object"
-	"github.com/jthomperoo/k8shorizmetrics/internal/pods"
-	"github.com/jthomperoo/k8shorizmetrics/internal/replicas"
-	"github.com/jthomperoo/k8shorizmetrics/internal/resource"
-	"github.com/jthomperoo/k8shorizmetrics/metrics"
-	autoscalingv2 "k8s.io/api/autoscaling/v2beta2"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/external"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/object"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/pods"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/replicas"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/resource"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics"
+	autoscalingv2 "k8s.io/api/autoscaling/v2"
 )
 
 // ExternalEvaluater produces a replica count based on an external metric provided

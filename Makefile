@@ -10,10 +10,8 @@ format:
 	@echo "=============Formatting============="
 	gofmt -s -w .
 	go mod tidy
-
-doc:
-	@echo "=============Serving docs============="
-	mkdocs serve
+	cd examples/cpureplicaprint && go mod tidy && gofmt -s -w .
+	cd examples/cpuprint && go mod tidy && gofmt -s -w .
 
 view_coverage:
 	@echo "=============Loading coverage HTML============="

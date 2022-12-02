@@ -17,11 +17,11 @@ limitations under the License.
 package metrics
 
 import (
-	"github.com/jthomperoo/k8shorizmetrics/metrics/external"
-	"github.com/jthomperoo/k8shorizmetrics/metrics/object"
-	"github.com/jthomperoo/k8shorizmetrics/metrics/pods"
-	"github.com/jthomperoo/k8shorizmetrics/metrics/resource"
-	autoscalingv2 "k8s.io/api/autoscaling/v2beta2"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/external"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/object"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/pods"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/resource"
+	autoscalingv2 "k8s.io/api/autoscaling/v2"
 )
 
 // Metric is a metric that has been retrieved from the K8s metrics server

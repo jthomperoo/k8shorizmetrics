@@ -30,9 +30,9 @@ package pods
 import (
 	"fmt"
 
-	"github.com/jthomperoo/k8shorizmetrics/internal/podutil"
-	"github.com/jthomperoo/k8shorizmetrics/metrics/pods"
-	metricsclient "github.com/jthomperoo/k8shorizmetrics/metricsclient"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/podutil"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/pods"
+	metricsclient "github.com/jthomperoo/k8shorizmetrics/v2/metricsclient"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	corelisters "k8s.io/client-go/listers/core/v1"

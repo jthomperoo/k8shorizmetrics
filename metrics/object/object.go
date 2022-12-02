@@ -19,7 +19,7 @@ package object
 import (
 	"time"
 
-	"github.com/jthomperoo/k8shorizmetrics/metrics/value"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/value"
 )
 
 // Metric (Object) is a metric describing a kubernetes object (for example, hits-per-second on an Ingress object).

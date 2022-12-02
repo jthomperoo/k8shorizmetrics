@@ -21,14 +21,14 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/jthomperoo/k8shorizmetrics/internal/fake"
-	"github.com/jthomperoo/k8shorizmetrics/internal/replicas"
-	"github.com/jthomperoo/k8shorizmetrics/internal/resource"
-	"github.com/jthomperoo/k8shorizmetrics/internal/testutil"
-	"github.com/jthomperoo/k8shorizmetrics/metrics"
-	"github.com/jthomperoo/k8shorizmetrics/metrics/podmetrics"
-	resourcemetrics "github.com/jthomperoo/k8shorizmetrics/metrics/resource"
-	"k8s.io/api/autoscaling/v2beta2"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/fake"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/replicas"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/resource"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/testutil"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/podmetrics"
+	resourcemetrics "github.com/jthomperoo/k8shorizmetrics/v2/metrics/resource"
+	v2 "k8s.io/api/autoscaling/v2"
 	k8sresource "k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/util/sets"
 )
@@ -58,8 +58,8 @@ func TestEvaluate(t *testing.T) {
 			0,
 			3,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					Resource: &v2beta2.ResourceMetricSource{},
+				Spec: v2.MetricSpec{
+					Resource: &v2.ResourceMetricSource{},
 				},
 			},
 		},
@@ -75,9 +75,9 @@ func TestEvaluate(t *testing.T) {
 			0,
 			5,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					Resource: &v2beta2.ResourceMetricSource{
-						Target: v2beta2.MetricTarget{
+				Spec: v2.MetricSpec{
+					Resource: &v2.ResourceMetricSource{
+						Target: v2.MetricTarget{
 							AverageValue: k8sresource.NewMilliQuantity(50, k8sresource.DecimalSI),
 						},
 					},
@@ -98,9 +98,9 @@ func TestEvaluate(t *testing.T) {
 			0,
 			3,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					Resource: &v2beta2.ResourceMetricSource{
-						Target: v2beta2.MetricTarget{
+				Spec: v2.MetricSpec{
+					Resource: &v2.ResourceMetricSource{
+						Target: v2.MetricTarget{
 							AverageUtilization: testutil.Int32Ptr(15),
 						},
 					},
@@ -122,9 +122,9 @@ func TestEvaluate(t *testing.T) {
 			0,
 			2,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					Resource: &v2beta2.ResourceMetricSource{
-						Target: v2beta2.MetricTarget{
+				Spec: v2.MetricSpec{
+					Resource: &v2.ResourceMetricSource{
+						Target: v2.MetricTarget{
 							AverageUtilization: testutil.Int32Ptr(50),
 						},
 					},
@@ -156,9 +156,9 @@ func TestEvaluate(t *testing.T) {
 			0,
 			2,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					Resource: &v2beta2.ResourceMetricSource{
-						Target: v2beta2.MetricTarget{
+				Spec: v2.MetricSpec{
+					Resource: &v2.ResourceMetricSource{
+						Target: v2.MetricTarget{
 							AverageUtilization: testutil.Int32Ptr(50),
 						},
 					},
@@ -190,9 +190,9 @@ func TestEvaluate(t *testing.T) {
 			0,
 			2,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					Resource: &v2beta2.ResourceMetricSource{
-						Target: v2beta2.MetricTarget{
+				Spec: v2.MetricSpec{
+					Resource: &v2.ResourceMetricSource{
+						Target: v2.MetricTarget{
 							AverageUtilization: testutil.Int32Ptr(50),
 						},
 					},
@@ -224,9 +224,9 @@ func TestEvaluate(t *testing.T) {
 			0,
 			4,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					Resource: &v2beta2.ResourceMetricSource{
-						Target: v2beta2.MetricTarget{
+				Spec: v2.MetricSpec{
+					Resource: &v2.ResourceMetricSource{
+						Target: v2.MetricTarget{
 							AverageUtilization: testutil.Int32Ptr(50),
 						},
 					},
@@ -263,9 +263,9 @@ func TestEvaluate(t *testing.T) {
 			0,
 			4,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					Resource: &v2beta2.ResourceMetricSource{
-						Target: v2beta2.MetricTarget{
+				Spec: v2.MetricSpec{
+					Resource: &v2.ResourceMetricSource{
+						Target: v2.MetricTarget{
 							AverageUtilization: testutil.Int32Ptr(50),
 						},
 					},
@@ -302,9 +302,9 @@ func TestEvaluate(t *testing.T) {
 			0,
 			4,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					Resource: &v2beta2.ResourceMetricSource{
-						Target: v2beta2.MetricTarget{
+				Spec: v2.MetricSpec{
+					Resource: &v2.ResourceMetricSource{
+						Target: v2.MetricTarget{
 							AverageUtilization: testutil.Int32Ptr(50),
 						},
 					},
@@ -346,9 +346,9 @@ func TestEvaluate(t *testing.T) {
 			0.5,
 			4,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					Resource: &v2beta2.ResourceMetricSource{
-						Target: v2beta2.MetricTarget{
+				Spec: v2.MetricSpec{
+					Resource: &v2.ResourceMetricSource{
+						Target: v2.MetricTarget{
 							AverageUtilization: testutil.Int32Ptr(50),
 						},
 					},

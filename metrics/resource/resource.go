@@ -19,7 +19,7 @@ package resource
 import (
 	"time"
 
-	"github.com/jthomperoo/k8shorizmetrics/metrics/podmetrics"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/podmetrics"
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 

@@ -13,7 +13,7 @@ to work out the target replica count that the HPA does.
 ## Install
 
 ```bash
-go get -u github.com/jthomperoo/k8shorizmetrics
+go get -u github.com/jthomperoo/k8shorizmetrics/v2@v2.0.0
 ```
 
 ## Features
@@ -39,7 +39,7 @@ import (
 	"github.com/jthomperoo/k8shorizmetrics"
 	"github.com/jthomperoo/k8shorizmetrics/metricsclient"
 	"github.com/jthomperoo/k8shorizmetrics/podsclient"
-	"k8s.io/api/autoscaling/v2beta2"
+	"k8s.io/api/autoscaling/v2"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/kubernetes"
@@ -90,6 +90,13 @@ func main() {
 ## Documentation
 
 See the [Go doc](https://pkg.go.dev/github.com/jthomperoo/k8shorizmetrics).
+
+## Migration from v1 to v2
+
+There are two changes you need to make to migrate from `v1` to `v2`:
+
+1. Switch from using `k8s.io/api/autoscaling/v2beta2` to `k8s.io/api/autoscaling/v2`.
+2. Switch from using `github.com/jthomperoo/k8shorizmetrics` to `github.com/jthomperoo/k8shorizmetrics/v2`.
 
 ## Examples
 
