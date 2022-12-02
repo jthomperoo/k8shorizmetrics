@@ -13,10 +13,6 @@ format:
 	cd examples/cpureplicaprint && go mod tidy && gofmt -s -w .
 	cd examples/cpuprint && go mod tidy && gofmt -s -w .
 
-doc:
-	@echo "=============Serving docs============="
-	mkdocs serve
-
 view_coverage:
 	@echo "=============Loading coverage HTML============="
 	go tool cover -html=unit_cover.out
