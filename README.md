@@ -67,12 +67,12 @@ func main() {
 	})
 
 	// Metric spec to gather, CPU resource utilization
-	spec := v2beta2.MetricSpec{
-		Type: v2beta2.ResourceMetricSourceType,
-		Resource: &v2beta2.ResourceMetricSource{
+	spec := v2.MetricSpec{
+		Type: v2.ResourceMetricSourceType,
+		Resource: &v2.ResourceMetricSource{
 			Name: corev1.ResourceCPU,
-			Target: v2beta2.MetricTarget{
-				Type: v2beta2.UtilizationMetricType,
+			Target: v2.MetricTarget{
+				Type: v2.UtilizationMetricType,
 			},
 		},
 	}
