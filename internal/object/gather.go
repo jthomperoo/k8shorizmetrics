@@ -30,11 +30,11 @@ package object
 import (
 	"fmt"
 
-	"github.com/jthomperoo/k8shorizmetrics/internal/podutil"
-	"github.com/jthomperoo/k8shorizmetrics/metrics/object"
-	"github.com/jthomperoo/k8shorizmetrics/metrics/value"
-	metricsclient "github.com/jthomperoo/k8shorizmetrics/metricsclient"
-	autoscaling "k8s.io/api/autoscaling/v2beta2"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/podutil"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/object"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/value"
+	metricsclient "github.com/jthomperoo/k8shorizmetrics/v2/metricsclient"
+	autoscaling "k8s.io/api/autoscaling/v2"
 	"k8s.io/apimachinery/pkg/labels"
 )
 

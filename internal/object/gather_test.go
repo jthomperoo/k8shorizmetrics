@@ -22,14 +22,14 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/jthomperoo/k8shorizmetrics/internal/fake"
-	"github.com/jthomperoo/k8shorizmetrics/internal/object"
-	"github.com/jthomperoo/k8shorizmetrics/internal/podutil"
-	"github.com/jthomperoo/k8shorizmetrics/internal/testutil"
-	objectmetric "github.com/jthomperoo/k8shorizmetrics/metrics/object"
-	"github.com/jthomperoo/k8shorizmetrics/metrics/value"
-	metricsclient "github.com/jthomperoo/k8shorizmetrics/metricsclient"
-	autoscalingv2 "k8s.io/api/autoscaling/v2beta2"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/fake"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/object"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/podutil"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/testutil"
+	objectmetric "github.com/jthomperoo/k8shorizmetrics/v2/metrics/object"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/value"
+	metricsclient "github.com/jthomperoo/k8shorizmetrics/v2/metricsclient"
+	autoscalingv2 "k8s.io/api/autoscaling/v2"
 	"k8s.io/apimachinery/pkg/labels"
 )
 

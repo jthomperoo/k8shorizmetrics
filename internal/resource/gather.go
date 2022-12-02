@@ -31,9 +31,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jthomperoo/k8shorizmetrics/internal/podutil"
-	"github.com/jthomperoo/k8shorizmetrics/metrics/resource"
-	metricsclient "github.com/jthomperoo/k8shorizmetrics/metricsclient"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/podutil"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/resource"
+	metricsclient "github.com/jthomperoo/k8shorizmetrics/v2/metricsclient"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	corelisters "k8s.io/client-go/listers/core/v1"

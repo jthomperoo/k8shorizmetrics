@@ -21,14 +21,14 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/jthomperoo/k8shorizmetrics/internal/fake"
-	"github.com/jthomperoo/k8shorizmetrics/internal/object"
-	"github.com/jthomperoo/k8shorizmetrics/internal/replicas"
-	"github.com/jthomperoo/k8shorizmetrics/internal/testutil"
-	"github.com/jthomperoo/k8shorizmetrics/metrics"
-	objectmetrics "github.com/jthomperoo/k8shorizmetrics/metrics/object"
-	"github.com/jthomperoo/k8shorizmetrics/metrics/value"
-	"k8s.io/api/autoscaling/v2beta2"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/fake"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/object"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/replicas"
+	"github.com/jthomperoo/k8shorizmetrics/v2/internal/testutil"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics"
+	objectmetrics "github.com/jthomperoo/k8shorizmetrics/v2/metrics/object"
+	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/value"
+	v2 "k8s.io/api/autoscaling/v2"
 	"k8s.io/apimachinery/pkg/api/resource"
 )
 
@@ -57,8 +57,8 @@ func TestEvaluate(t *testing.T) {
 			0,
 			3,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					Object: &v2beta2.ObjectMetricSource{},
+				Spec: v2.MetricSpec{
+					Object: &v2.ObjectMetricSource{},
 				},
 			},
 		},
@@ -70,10 +70,10 @@ func TestEvaluate(t *testing.T) {
 			0,
 			5,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					Object: &v2beta2.ObjectMetricSource{
-						Target: v2beta2.MetricTarget{
-							Type:         v2beta2.AverageValueMetricType,
+				Spec: v2.MetricSpec{
+					Object: &v2.ObjectMetricSource{
+						Target: v2.MetricTarget{
+							Type:         v2.AverageValueMetricType,
 							AverageValue: resource.NewMilliQuantity(50, resource.DecimalSI),
 						},
 					},
@@ -93,10 +93,10 @@ func TestEvaluate(t *testing.T) {
 			0,
 			5,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					Object: &v2beta2.ObjectMetricSource{
-						Target: v2beta2.MetricTarget{
-							Type:         v2beta2.AverageValueMetricType,
+				Spec: v2.MetricSpec{
+					Object: &v2.ObjectMetricSource{
+						Target: v2.MetricTarget{
+							Type:         v2.AverageValueMetricType,
 							AverageValue: resource.NewMilliQuantity(50, resource.DecimalSI),
 						},
 					},
@@ -120,10 +120,10 @@ func TestEvaluate(t *testing.T) {
 			0,
 			5,
 			&metrics.Metric{
-				Spec: v2beta2.MetricSpec{
-					Object: &v2beta2.ObjectMetricSource{
-						Target: v2beta2.MetricTarget{
-							Type:  v2beta2.ValueMetricType,
+				Spec: v2.MetricSpec{
+					Object: &v2.ObjectMetricSource{
+						Target: v2.MetricTarget{
+							Type:  v2.ValueMetricType,
 							Value: resource.NewMilliQuantity(50, resource.DecimalSI),
 						},
 					},
