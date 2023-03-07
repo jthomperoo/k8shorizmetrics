@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// Package external contains models for external metrics as returned by the K8s metrics APIs.
 package external
 
 import (

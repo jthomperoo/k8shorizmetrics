@@ -55,7 +55,7 @@ func TestGather(t *testing.T) {
 		{
 			"Fail convert metric selector",
 			nil,
-			errors.New(`"invalid" is not a valid pod selector operator`),
+			errors.New(`"invalid" is not a valid label selector operator`),
 			nil,
 			nil,
 			"test-metric",
@@ -167,7 +167,7 @@ func TestGatherPerPod(t *testing.T) {
 		{
 			"Fail convert metric selector",
 			nil,
-			errors.New(`"invalid" is not a valid pod selector operator`),
+			errors.New(`"invalid" is not a valid label selector operator`),
 			nil,
 			nil,
 			"test-metric",

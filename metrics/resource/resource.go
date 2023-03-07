@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// Package resource contains models for resource metrics as returned by the K8s metrics APIs.
 package resource
 
 import (

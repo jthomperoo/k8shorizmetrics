@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// Package metricsclient provides a standard and easily instantiated way of querying metrics from the K8s APIs.
 package metricsclient
 
 import (

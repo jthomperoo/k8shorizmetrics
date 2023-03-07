@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The K8sHorizMetrics Authors.
+Copyright 2023 The K8sHorizMetrics Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,17 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Package podmetrics contains models for an individual pod's metrics as returned by the K8s metrics APIs.
-package podmetrics
-
-import "time"
-
-// Metric contains pod metric value (the metric values are expected to be the metric as a milli-value)
-type Metric struct {
-	Timestamp time.Time
-	Window    time.Duration
-	Value     int64
-}
-
-// MetricsInfo contains pod metrics as a map from pod names to MetricsInfo
-type MetricsInfo map[string]Metric
+// Package k8shorizmetrics provides a simplified interface for gathering metrics and calculating replicas in the same
+// way that the Horizontal Pod Autoscaler (HPA) does.
+// This is split into two parts, gathering metrics, and evaluating metrics (calculating replicas).
+// You can use these parts separately, or together to create a full evaluation process in the same way the HPA does.
+package k8shorizmetrics

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// Package value contains models for how K8s metric values are actually defined.
 package value
 
 // MetricValue is a representation of a computed value for a metric, can be either a raw value or an average value

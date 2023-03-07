@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// Package pods contains models for metrics relating to a set of pods as returned by the K8s metrics APIs.
 package pods
 
 import (

@@ -134,8 +134,7 @@ the other projects that solved it better and which could serve as inspiration.
 
 Developing this project requires these dependencies:
 
-* [Go v1.19+](https://go.dev/doc/install)
-* [staticcheck v0.3.3 (2022.1.3)](https://staticcheck.io/docs/getting-started/)
+* [Go v1.20+](https://go.dev/doc/install)
 * [Docker](https://docs.docker.com/install/)
 
 To view the docs, you need Python 3 installed:
