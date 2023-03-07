@@ -17,10 +17,6 @@ jobs:
     - name: Lint, format, and test
       run: |
 
-        # Get staticcheck
-        export PATH=$PATH:$(go env GOPATH)/bin
-        go install honnef.co/go/tools/cmd/staticcheck@v0.3.3
-
         make lint
         make format
         # Exit if after formatting there are any code differences

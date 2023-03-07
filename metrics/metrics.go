@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// Package metrics provides models for all of the metrics returned from the K8s APIs grouped into a single model.
 package metrics
 
 import (

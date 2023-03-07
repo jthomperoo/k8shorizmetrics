@@ -14,5 +14,5 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Package fake provides stubs for testing relevant to the Custom Pod Autoscaler packages
+// Package fake provides stubs for testing.
 package fake

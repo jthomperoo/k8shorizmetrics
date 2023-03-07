@@ -25,6 +25,7 @@ https://github.com/kubernetes/kubernetes/blob/master/pkg/controller/podautoscale
 https://github.com/kubernetes/kubernetes/blob/master/pkg/controller/podautoscaler/replica_calculator.go
 */
 
+// Package podutil provides utilities for getting pod information from the K8s APIs.
 package podutil
 
 import (

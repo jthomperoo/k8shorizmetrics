@@ -25,7 +25,7 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 )
 
-// metricsclient (fake) provides a way to insert functionality into a metricsclient
+// MetricsClient (fake) provides a way to insert functionality into a metricsclient
 type MetricsClient struct {
 	GetResourceMetricReactor func(resource corev1.ResourceName, namespace string, selector labels.Selector) (podmetrics.MetricsInfo, time.Time, error)
 	GetRawMetricReactor      func(metricName string, namespace string, selector labels.Selector, metricSelector labels.Selector) (podmetrics.MetricsInfo, time.Time, error)

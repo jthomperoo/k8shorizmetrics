@@ -120,11 +120,12 @@ func NewGatherer(
 	}
 }
 
+// Gather returns all of the metrics gathered based on the metric specs provided.
 func (c *Gatherer) Gather(specs []autoscalingv2.MetricSpec, namespace string, podSelector labels.Selector) ([]*metrics.Metric, error) {
 	return c.GatherWithOptions(specs, namespace, podSelector, c.CPUInitializationPeriod, c.DelayOfInitialReadinessStatus)
 }
 
-// Gather returns all of the metrics gathered based on the metric specs provided.
+// GatherWithOptions returns all of the metrics gathered based on the metric specs provided with options.
 func (c *Gatherer) GatherWithOptions(specs []autoscalingv2.MetricSpec, namespace string, podSelector labels.Selector,
 	cpuInitializationPeriod time.Duration, delayOfInitialReadinessStatus time.Duration) ([]*metrics.Metric, error) {
 	var combinedMetrics []*metrics.Metric
@@ -150,11 +151,12 @@ func (c *Gatherer) GatherWithOptions(specs []autoscalingv2.MetricSpec, namespace
 	return combinedMetrics, nil
 }
 
+// GatherSingleMetric returns the metric gathered based on a single metric spec.
 func (c *Gatherer) GatherSingleMetric(spec autoscalingv2.MetricSpec, namespace string, podSelector labels.Selector) (*metrics.Metric, error) {
 	return c.GatherSingleMetricWithOptions(spec, namespace, podSelector, c.CPUInitializationPeriod, c.DelayOfInitialReadinessStatus)
 }
 
-// GatherSingleMetric returns the metric gathered based on a single metric spec.
+// GatherSingleMetricWithOptions returns the metric gathered based on a single metric spec with options.
 func (c *Gatherer) GatherSingleMetricWithOptions(spec autoscalingv2.MetricSpec, namespace string, podSelector labels.Selector,
 	cpuInitializationPeriod time.Duration, delayOfInitialReadinessStatus time.Duration) (*metrics.Metric, error) {
 	switch spec.Type {

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// Package object contains models for object metrics as returned by the K8s metrics APIs.
 package object
 
 import (

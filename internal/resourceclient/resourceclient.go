@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// Package resourceclient provides utilities for retrieving arbitrary K8s resources from the APIs.
 package resourceclient
 
 import (
