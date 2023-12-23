@@ -13,7 +13,7 @@ to work out the target replica count that the HPA does.
 ## Install
 
 ```bash
-go get -u github.com/jthomperoo/k8shorizmetrics/v2@v2.0.1
+go get -u github.com/jthomperoo/k8shorizmetrics/v2@v2.0.2
 ```
 
 ## Features
