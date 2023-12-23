@@ -3,7 +3,7 @@ module github.com/jthomperoo/k8shorizmetrics/examples/cpureplicaprint
 go 1.21
 
 require (
-	github.com/jthomperoo/k8shorizmetrics/v2 v2.0.1
+	github.com/jthomperoo/k8shorizmetrics/v2 v2.0.2
 	k8s.io/api v0.29.0
 	k8s.io/apimachinery v0.29.0
 	k8s.io/client-go v0.29.0
