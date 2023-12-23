@@ -134,12 +134,7 @@ the other projects that solved it better and which could serve as inspiration.
 
 Developing this project requires these dependencies:
 
-* [Go v1.20+](https://go.dev/doc/install)
-* [Docker](https://docs.docker.com/install/)
-
-To view the docs, you need Python 3 installed:
-
-* [Python](https://www.python.org/downloads/) >= `3.8`
+* [Go v1.21+](https://go.dev/doc/install)
 
 It is recommended to test locally using a local Kubernetes managment system, such as
 [k3d](https://github.com/rancher/k3d) (allows running a small Kubernetes cluster locally using Docker).

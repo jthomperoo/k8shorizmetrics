@@ -4,7 +4,7 @@ test:
 
 lint:
 	@echo "=============Linting============="
-	go run honnef.co/go/tools/cmd/staticcheck@v0.4.2 ./...
+	go run honnef.co/go/tools/cmd/staticcheck@v0.4.6 ./...
 
 format:
 	@echo "=============Formatting============="
