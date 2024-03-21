@@ -21,9 +21,9 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/jthomperoo/k8shorizmetrics/v2"
-	"github.com/jthomperoo/k8shorizmetrics/v2/internal/fake"
-	"github.com/jthomperoo/k8shorizmetrics/v2/metrics"
+	"github.com/jthomperoo/k8shorizmetrics/v3"
+	"github.com/jthomperoo/k8shorizmetrics/v3/internal/fake"
+	"github.com/jthomperoo/k8shorizmetrics/v3/metrics"
 	v2 "k8s.io/api/autoscaling/v2"
 )
 
