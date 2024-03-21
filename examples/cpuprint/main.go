@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The K8sHorizMetrics Authors.
+Copyright 2024 The K8sHorizMetrics Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package main
 
 import (
 	"log"
+	"path/filepath"
 	"time"
 
 	"github.com/jthomperoo/k8shorizmetrics/v2"
@@ -27,7 +28,8 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/clientcmd"
+	"k8s.io/client-go/util/homedir"
 )
 
 const (
@@ -41,9 +43,9 @@ var podMatchSelector = labels.SelectorFromSet(labels.Set{
 })
 
 func main() {
-	clusterConfig, err := rest.InClusterConfig()
+	clusterConfig, err := clientcmd.BuildConfigFromFlags("", filepath.Join(homedir.HomeDir(), ".kube", "config"))
 	if err != nil {
-		log.Fatalf("Fail to create in-cluster Kubernetes config: %s", err)
+		log.Fatalf("Fail to create out-of-cluster Kubernetes config: %s", err)
 	}
 
 	clientset, err := kubernetes.NewForConfig(clusterConfig)
@@ -91,7 +93,7 @@ func main() {
 			continue
 		}
 
-		log.Println("CPU statistics:")
+		log.Println("CPU metrics:")
 
 		for pod, podmetric := range metric.Resource.PodMetricsInfo {
 			actualCPU := podmetric.Value

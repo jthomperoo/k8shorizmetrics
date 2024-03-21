@@ -3,14 +3,15 @@
 This example shows how the library can be used to both gather metrics based on metric specs.
 
 In this example a deployment called `php-apache` is created with 4 replicas that responds to simple HTTP requests
-with an `OK!`. A separate single pod deployment is set up called `cpuprint` running a Docker image that will
-report into the logs the CPU metrics retrieved.
+with an `OK!`. The example will query the CPU metrics for the pods in this deployment and print them to stdout.
+
+> Note this example uses out of cluster configuration of the Kubernetes client, if you want to run this inside the
+> cluster you should use in cluster configuration.
 
 ## Usage
 
 To follow the steps below and to see this example in action you need the following installed:
 
-- [Docker](https://docs.docker.com/get-docker/)
 - [Go v1.21+](https://go.dev/doc/install)
 - [K3D v5.6+](https://k3d.io/v5.6.0/#installation)
 
@@ -22,31 +23,21 @@ k3d cluster create
 
 ### Steps
 
-1. First build the binary and bundle it into the Docker image:
+Run `go get` to make sure you have all of the dependencies for running the application installed.
 
-```bash
-CGO_ENABLED=0 GOOS=linux go build -o dist/main && docker build -t cpuprint .
-```
-
-2. Next import the Docker image into the k3d cluster:
-
-```bash
-k3d image import cpuprint:latest
-```
-
-3. Then deploy the entire example by applying the deployment YAML:
+1. First create the deployment to monitor by applying the deployment YAML:
 
 ```bash
 kubectl apply -f deploy.yaml
 ```
 
-4. Finally you can see the log output of the example container by running:
+2. Run the example using:
 
 ```bash
-kubectl logs -l run=cpuprint -f
+go run main.go
 ```
 
-5. If you see some errors like this:
+3. If you see some errors like this:
 
 ```
 2022/05/08 22:26:09 invalid metrics (1 invalid out of 1), first error is: failed to get resource metric: unable to get metrics for resource cpu: no metrics returned from resource metrics API
@@ -66,7 +57,7 @@ Eventually it should provide output like this:
 2022/05/08 22:27:39 ----------
 ```
 
-6. Try increasing the CPU load:
+4. Try increasing the CPU load:
 
 ```bash
 kubectl run -it --rm load-generator --image=busybox -- /bin/sh
