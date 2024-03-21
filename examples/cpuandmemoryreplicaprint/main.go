@@ -18,6 +18,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"log"
 	"path/filepath"
 	"time"
@@ -72,7 +73,7 @@ func main() {
 	// Set up the evaluator, only needs to know the tolerance configuration value for determining replica counts
 	evaluator := k8shorizmetrics.NewEvaluator(tolerance)
 
-	// This is the metric spec, this targets the CPU resource metric, gathering utilization values and targeting
+	// This is the CPU metric spec, this targets the CPU resource metric, gathering utilization values and targeting
 	// an average utilization of 50%
 	// Equivalent to the following YAML:
 	// metrics:
@@ -82,10 +83,31 @@ func main() {
 	// 	   target:
 	// 	     type: Utilization
 	// 	     averageUtilization: 50
-	spec := v2.MetricSpec{
+	cpuSpec := v2.MetricSpec{
 		Type: v2.ResourceMetricSourceType,
 		Resource: &v2.ResourceMetricSource{
 			Name: corev1.ResourceCPU,
+			Target: v2.MetricTarget{
+				Type:               v2.UtilizationMetricType,
+				AverageUtilization: &targetAverageUtilization,
+			},
+		},
+	}
+
+	// This is the memory metric spec, this targets the memory resource metric, gathering utilization values and
+	// targeting an average utilization of 50%
+	// Equivalent to the following YAML:
+	// metrics:
+	// - type: Resource
+	//   resource:
+	// 	   name: memory
+	// 	   target:
+	// 	     type: Utilization
+	// 	     averageUtilization: 50
+	memorySpec := v2.MetricSpec{
+		Type: v2.ResourceMetricSourceType,
+		Resource: &v2.ResourceMetricSource{
+			Name: corev1.ResourceMemory,
 			Target: v2.MetricTarget{
 				Type:               v2.UtilizationMetricType,
 				AverageUtilization: &targetAverageUtilization,
@@ -97,19 +119,36 @@ func main() {
 	for {
 		time.Sleep(5 * time.Second)
 
-		// Gather the metrics using the spec, targeting the namespace and pod selector defined above
-		metric, err := gather.GatherSingleMetric(spec, namespace, podMatchSelector)
+		specs := []v2.MetricSpec{cpuSpec, memorySpec}
+
+		// Gather the metrics using the specs, targeting the namespace and pod selector defined above
+		metrics, err := gather.Gather(specs, namespace, podMatchSelector)
 		if err != nil {
-			log.Println(err)
-			continue
+			var gatherError *k8shorizmetrics.GathererMultiMetricError
+			if errors.As(err, &gatherError) {
+				for i, partialErr := range gatherError.Errors {
+					log.Printf("partial error %d/%d: %s", i+1, len(gatherError.Errors), partialErr)
+				}
+
+				if !gatherError.Partial {
+					continue
+				}
+
+				log.Printf("%d/%d metrics were gathered successfully, continuing to evaluate with available metrics", len(metrics), len(specs))
+			} else {
+				log.Println(err)
+				continue
+			}
 		}
 
-		log.Println("CPU metrics:")
+		log.Println("Pod Metrics:")
 
-		for pod, podmetric := range metric.Resource.PodMetricsInfo {
-			actualCPU := podmetric.Value
-			requestedCPU := metric.Resource.Requests[pod]
-			log.Printf("Pod: %s, CPU usage: %dm (%0.2f%% of requested)\n", pod, actualCPU, float64(actualCPU)/float64(requestedCPU)*100.0)
+		for _, metric := range metrics {
+			for pod, podmetric := range metric.Resource.PodMetricsInfo {
+				actual := podmetric.Value
+				requested := metric.Resource.Requests[pod]
+				log.Printf("Pod: %s, %s usage: %d (%0.2f%% of requested)\n", pod, &metric.Spec.Resource.Name, actual, float64(actual)/float64(requested)*100.0)
+			}
 		}
 
 		// To find out the current replica count we can use the Kubernetes client-go client to get the scale sub
@@ -122,12 +161,25 @@ func main() {
 
 		currentReplicaCount := scale.Spec.Replicas
 
-		// Calculate the target number of replicas that the HPA would scale to based on the metric provided, current
-		// replicas, and the tolerance configuration value provided
-		targetReplicaCount, err := evaluator.EvaluateSingleMetric(metric, scale.Spec.Replicas)
+		// Calculate the target number of replicas that the HPA would scale to based on the metrics provided and current
+		// replicas
+		targetReplicaCount, err := evaluator.Evaluate(metrics, scale.Spec.Replicas)
 		if err != nil {
-			log.Println(err)
-			continue
+			var evaluatorError *k8shorizmetrics.EvaluatorMultiMetricError
+			if errors.As(err, &evaluatorError) {
+				for i, partialErr := range evaluatorError.Errors {
+					log.Printf("partial error %d/%d: %s", i+1, len(evaluatorError.Errors), partialErr)
+				}
+
+				if !evaluatorError.Partial {
+					continue
+				}
+
+				log.Printf("%d/%d metrics were evaluated successfully, printing the expected evaluation using the available metrics", len(metrics), len(specs))
+			} else {
+				log.Println(err)
+				continue
+			}
 		}
 
 		if targetReplicaCount == currentReplicaCount {

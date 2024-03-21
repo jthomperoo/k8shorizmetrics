@@ -3,9 +3,11 @@
 This example shows how the library can be used to both gather metrics based on metric specs, and then calculate the
 replica count that the Horizontal Pod Autoscaler (HPA) would target based on those metrics.
 
+This example targets two resource metrics, CPU and memory.
+
 In this example a deployment called `php-apache` is created with 4 replicas that responds to simple HTTP requests
-with an `OK!`. The example will query the CPU metrics for the pods in this deployment, along with the number of
-replicas the HPA would target based on those metrics and print them to stdout.
+with an `OK!`. The example will query the CPU and memory metrics for the pods in this deployment, along with the number
+of replicas the HPA would target based on those metrics and print them to stdout.
 
 > Note this example uses out of cluster configuration of the Kubernetes client, if you want to run this inside the
 > cluster you should use in cluster configuration.
@@ -51,13 +53,16 @@ the metrics server.
 Eventually it should provide output like this:
 
 ```
-2022/05/08 22:27:39 CPU statistics:
-2022/05/08 22:27:39 Pod: php-apache-d4cf67d68-s9w2g, CPU usage: 1m (0.50% of requested)
-2022/05/08 22:27:39 Pod: php-apache-d4cf67d68-v9fc2, CPU usage: 1m (0.50% of requested)
-2022/05/08 22:27:39 Pod: php-apache-d4cf67d68-h4z4k, CPU usage: 1m (0.50% of requested)
-2022/05/08 22:27:39 Pod: php-apache-d4cf67d68-jrskj, CPU usage: 1m (0.50% of requested)
-2022/05/08 22:27:39 Based on the CPU of the pods the Horizontal Pod Autoscaler would scale from 4 to 0 replicas
-2022/05/08 22:27:39 ----------
+2024/03/17 23:30:03 Pod Metrics:
+2024/03/17 23:30:03 Pod: php-apache-7cb7bd96b4-6rf4f, cpu usage: 1 (0.50% of requested)
+2024/03/17 23:30:03 Pod: php-apache-7cb7bd96b4-7ncxb, cpu usage: 1 (0.50% of requested)
+2024/03/17 23:30:03 Pod: php-apache-7cb7bd96b4-f27b4, cpu usage: 1 (0.50% of requested)
+2024/03/17 23:30:03 Pod: php-apache-7cb7bd96b4-tb8rn, cpu usage: 1 (0.50% of requested)
+2024/03/17 23:30:03 Pod: php-apache-7cb7bd96b4-tb8rn, memory usage: 33853440000 (50.45% of requested)
+2024/03/17 23:30:03 Pod: php-apache-7cb7bd96b4-6rf4f, memory usage: 32382976000 (48.25% of requested)
+2024/03/17 23:30:03 Pod: php-apache-7cb7bd96b4-7ncxb, memory usage: 32739328000 (48.79% of requested)
+2024/03/17 23:30:03 Pod: php-apache-7cb7bd96b4-f27b4, memory usage: 32493568000 (48.42% of requested)
+2024/03/17 23:30:03 The Horizontal Pod Autoscaler would stay at 4 replicas
 ```
 
 4. Try increasing the CPU load:

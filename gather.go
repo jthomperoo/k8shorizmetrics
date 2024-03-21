@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-Modifications Copyright 2022 The K8sHorizMetrics Authors.
+Modifications Copyright 2024 The K8sHorizMetrics Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -49,6 +49,18 @@ import (
 	corelisters "k8s.io/client-go/listers/core/v1"
 	k8sscale "k8s.io/client-go/scale"
 )
+
+// GathererMultiMetricError occurs when gathering multiple metrics, if any metric fails to be gathered this error will
+// be returned which contains all of the individual errors in the 'Errors' slice, if some metrics were gathered
+// successfully the error will have the 'Partial' property set to true.
+type GathererMultiMetricError struct {
+	Partial bool
+	Errors  []error
+}
+
+func (e *GathererMultiMetricError) Error() string {
+	return fmt.Sprintf("gatherer multi metric error: %d errors, first error is %s", len(e.Errors), e.Errors[0])
+}
 
 // ExternalGatherer allows retrieval of external metrics.
 type ExternalGatherer interface {
@@ -121,31 +133,43 @@ func NewGatherer(
 }
 
 // Gather returns all of the metrics gathered based on the metric specs provided.
+// If an error occurs gathering any metric this will return a GatherMultiMetricError. If a partial error occurs,
+// meaning some metrics were gathered successfully and others failed, the 'Partial' property of this error will be
+// set to true.
 func (c *Gatherer) Gather(specs []autoscalingv2.MetricSpec, namespace string, podSelector labels.Selector) ([]*metrics.Metric, error) {
 	return c.GatherWithOptions(specs, namespace, podSelector, c.CPUInitializationPeriod, c.DelayOfInitialReadinessStatus)
 }
 
 // GatherWithOptions returns all of the metrics gathered based on the metric specs provided with options.
+// If an error occurs gathering any metric this will return a GatherMultiMetricError. If a partial error occurs,
+// meaning some metrics were gathered successfully and others failed, the 'Partial' property of this error will be
+// set to true.
 func (c *Gatherer) GatherWithOptions(specs []autoscalingv2.MetricSpec, namespace string, podSelector labels.Selector,
 	cpuInitializationPeriod time.Duration, delayOfInitialReadinessStatus time.Duration) ([]*metrics.Metric, error) {
-	var combinedMetrics []*metrics.Metric
-	var invalidMetricError error
-	invalidMetricsCount := 0
+	combinedMetrics := []*metrics.Metric{}
+	gatherErrors := []error{}
 	for _, spec := range specs {
 		metric, err := c.GatherSingleMetricWithOptions(spec, namespace, podSelector, cpuInitializationPeriod, delayOfInitialReadinessStatus)
 		if err != nil {
-			if invalidMetricsCount <= 0 {
-				invalidMetricError = err
-			}
-			invalidMetricsCount++
+			gatherErrors = append(gatherErrors, err)
 			continue
 		}
 		combinedMetrics = append(combinedMetrics, metric)
 	}
 
-	// If all metrics are invalid return error and set condition on hpa based on first invalid metric.
-	if invalidMetricsCount >= len(specs) {
-		return nil, fmt.Errorf("invalid metrics (%d invalid out of %d), first error is: %w", invalidMetricsCount, len(specs), invalidMetricError)
+	if len(gatherErrors) > 0 {
+		partial := len(gatherErrors) < len(specs)
+		if partial {
+			return combinedMetrics, &GathererMultiMetricError{
+				Partial: partial,
+				Errors:  gatherErrors,
+			}
+		}
+
+		return nil, &GathererMultiMetricError{
+			Partial: partial,
+			Errors:  gatherErrors,
+		}
 	}
 
 	return combinedMetrics, nil
@@ -232,8 +256,8 @@ func (c *Gatherer) GatherSingleMetricWithOptions(spec autoscalingv2.MetricSpec, 
 
 	case autoscalingv2.ExternalMetricSourceType:
 		switch spec.External.Target.Type {
-		case autoscalingv2.AverageValueMetricType:
-			externalMetric, err := c.External.GatherPerPod(spec.External.Metric.Name, namespace, spec.External.Metric.Selector)
+		case autoscalingv2.ValueMetricType:
+			externalMetric, err := c.External.Gather(spec.External.Metric.Name, namespace, spec.External.Metric.Selector, podSelector)
 			if err != nil {
 				return nil, fmt.Errorf("failed to get external metric: %w", err)
 			}
@@ -241,8 +265,8 @@ func (c *Gatherer) GatherSingleMetricWithOptions(spec autoscalingv2.MetricSpec, 
 				Spec:     spec,
 				External: externalMetric,
 			}, nil
-		case autoscalingv2.ValueMetricType:
-			externalMetric, err := c.External.Gather(spec.External.Metric.Name, namespace, spec.External.Metric.Selector, podSelector)
+		case autoscalingv2.AverageValueMetricType:
+			externalMetric, err := c.External.GatherPerPod(spec.External.Metric.Name, namespace, spec.External.Metric.Selector)
 			if err != nil {
 				return nil, fmt.Errorf("failed to get external metric: %w", err)
 			}

@@ -1,7 +1,7 @@
 [![Build](https://github.com/jthomperoo/k8shorizmetrics/workflows/main/badge.svg)](https://github.com/jthomperoo/k8shorizmetrics/actions)
-[![go.dev](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat)](https://pkg.go.dev/github.com/jthomperoo/k8shorizmetrics)
+[![go.dev](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat)](https://pkg.go.dev/github.com/jthomperoo/k8shorizmetrics/v2)
 [![Go Report
-Card](https://goreportcard.com/badge/github.com/jthomperoo/k8shorizmetrics)](https://goreportcard.com/report/github.com/jthomperoo/k8shorizmetrics)
+Card](https://goreportcard.com/badge/github.com/jthomperoo/k8shorizmetrics/v2)](https://goreportcard.com/report/github.com/jthomperoo/k8shorizmetrics/v2)
 [![License](https://img.shields.io/:license-apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 # k8shorizmetrics
@@ -89,7 +89,7 @@ func main() {
 
 ## Documentation
 
-See the [Go doc](https://pkg.go.dev/github.com/jthomperoo/k8shorizmetrics).
+See the [Go doc](https://pkg.go.dev/github.com/jthomperoo/k8shorizmetrics/v2).
 
 ## Migration from v1 to v2
 
