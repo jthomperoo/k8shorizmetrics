@@ -5,6 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- **BREAKING CHANGE** Gather now returns the `GathererMultiMetricError` error type if any of the metrics fail to
+gather. This error is returned for partial errors, meaning some metrics gathered successfully and others did not.
+If this partial error occurs the `GathererMultiMetricError` error will have the `Partial` property set to `true`. This
+can be checked for using `errors.As`.
+- **BREAKING CHANGE** Evaluate now returns the `EvaluatorMultiMetricError` error type if any of the metrics fail to
+evaluate. This error is returned for partial errors, meaning some metrics evaluted successfully and others did not.
+If this partial error occurs the `EvaluatorMultiMetricError` error will have the `Partial` property set to `true`. This
+can be checked for using `errors.As`.
 
 ## [v2.0.2] - 2023-12-23
 ### Changed
