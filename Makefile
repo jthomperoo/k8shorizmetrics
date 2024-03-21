@@ -4,12 +4,13 @@ test:
 
 lint:
 	@echo "=============Linting============="
-	go run honnef.co/go/tools/cmd/staticcheck@v0.4.6 ./...
+	go run honnef.co/go/tools/cmd/staticcheck@v0.4.7 ./...
 
 format:
 	@echo "=============Formatting============="
 	gofmt -s -w .
 	go mod tidy
+	cd examples/cpuandmemoryreplicaprint && go mod tidy && gofmt -s -w .
 	cd examples/cpureplicaprint && go mod tidy && gofmt -s -w .
 	cd examples/cpuprint && go mod tidy && gofmt -s -w .
 
