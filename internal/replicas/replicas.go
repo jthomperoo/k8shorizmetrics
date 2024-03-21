@@ -31,8 +31,8 @@ package replicas
 import (
 	"math"
 
-	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/podmetrics"
-	"github.com/jthomperoo/k8shorizmetrics/v2/metricsclient"
+	"github.com/jthomperoo/k8shorizmetrics/v3/metrics/podmetrics"
+	"github.com/jthomperoo/k8shorizmetrics/v3/metricsclient"
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 

@@ -1,7 +1,7 @@
 [![Build](https://github.com/jthomperoo/k8shorizmetrics/workflows/main/badge.svg)](https://github.com/jthomperoo/k8shorizmetrics/actions)
-[![go.dev](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat)](https://pkg.go.dev/github.com/jthomperoo/k8shorizmetrics/v2)
+[![go.dev](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat)](https://pkg.go.dev/github.com/jthomperoo/k8shorizmetrics/v3)
 [![Go Report
-Card](https://goreportcard.com/badge/github.com/jthomperoo/k8shorizmetrics/v2)](https://goreportcard.com/report/github.com/jthomperoo/k8shorizmetrics/v2)
+Card](https://goreportcard.com/badge/github.com/jthomperoo/k8shorizmetrics/v3)](https://goreportcard.com/report/github.com/jthomperoo/k8shorizmetrics/v3)
 [![License](https://img.shields.io/:license-apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 # k8shorizmetrics
@@ -13,7 +13,7 @@ to work out the target replica count that the HPA does.
 ## Install
 
 ```bash
-go get -u github.com/jthomperoo/k8shorizmetrics/v2@v2.0.2
+go get -u github.com/jthomperoo/k8shorizmetrics/v3@v3.0.0
 ```
 
 ## Features
@@ -89,14 +89,54 @@ func main() {
 
 ## Documentation
 
-See the [Go doc](https://pkg.go.dev/github.com/jthomperoo/k8shorizmetrics/v2).
+See the [Go doc](https://pkg.go.dev/github.com/jthomperoo/k8shorizmetrics/v3).
 
-## Migration from v1 to v2
+## Migration
+
+This section explains how to migrate between versions of the library.
+
+### From v1 to v2
 
 There are two changes you need to make to migrate from `v1` to `v2`:
 
 1. Switch from using `k8s.io/api/autoscaling/v2beta2` to `k8s.io/api/autoscaling/v2`.
 2. Switch from using `github.com/jthomperoo/k8shorizmetrics` to `github.com/jthomperoo/k8shorizmetrics/v2`.
+
+### From v2 to v3
+
+The breaking changes introduced by `v3` are:
+
+- Gather now returns the `GathererMultiMetricError` error type if any of the metrics fail to gather. This error is
+returned for partial errors, meaning some metrics gathered successfully and others did not. If this partial error
+occurs the `GathererMultiMetricError` error will have the `Partial` property set to `true`. This can be checked for
+using `errors.As`.
+- Evaluate now returns the `EvaluatorMultiMetricError` error type if any of the metrics fail to
+evaluate. This error is returned for partial errors, meaning some metrics evaluted successfully and others did not.
+If this partial error occurs the `EvaluatorMultiMetricError` error will have the `Partial` property set to `true`. This
+can be checked for using `errors.As`.
+
+To update to `v3` you will need to update all references in your code that refer to
+`github.com/jthomperoo/k8shorizmetrics/v2` to use `github.com/jthomperoo/k8shorizmetrics/v3`.
+
+If you want the behaviour to stay the same and to swallow partial errors you can use code like this:
+
+```go
+metrics, err := gather.Gather(specs, namespace, podMatchSelector)
+if err != nil {
+	gatherErr := &k8shorizmetrics.GathererMultiMetricError{}
+	if !errors.As(err, &gatherErr) {
+		log.Fatal(err)
+	}
+
+	if !gatherErr.Partial {
+		log.Fatal(err)
+	}
+
+	// Not a partial error, just continue as normal
+}
+```
+
+You can use similar code for the `Evaluate` method of the `Evaluater`.
 
 ## Examples
 

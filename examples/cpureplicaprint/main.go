@@ -22,9 +22,9 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/jthomperoo/k8shorizmetrics/v2"
-	"github.com/jthomperoo/k8shorizmetrics/v2/metricsclient"
-	"github.com/jthomperoo/k8shorizmetrics/v2/podsclient"
+	"github.com/jthomperoo/k8shorizmetrics/v3"
+	"github.com/jthomperoo/k8shorizmetrics/v3/metricsclient"
+	"github.com/jthomperoo/k8shorizmetrics/v3/podsclient"
 	v2 "k8s.io/api/autoscaling/v2"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

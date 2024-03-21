@@ -28,8 +28,8 @@ https://github.com/kubernetes/kubernetes/blob/master/pkg/controller/podautoscale
 package pods
 
 import (
-	"github.com/jthomperoo/k8shorizmetrics/v2/internal/replicas"
-	"github.com/jthomperoo/k8shorizmetrics/v2/metrics"
+	"github.com/jthomperoo/k8shorizmetrics/v3/internal/replicas"
+	"github.com/jthomperoo/k8shorizmetrics/v3/metrics"
 )
 
 // Evaluate (pods) calculates a replica count evaluation, using the tolerance and calculater provided
