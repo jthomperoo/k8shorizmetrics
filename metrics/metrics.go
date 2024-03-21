@@ -18,10 +18,10 @@ limitations under the License.
 package metrics
 
 import (
-	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/external"
-	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/object"
-	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/pods"
-	"github.com/jthomperoo/k8shorizmetrics/v2/metrics/resource"
+	"github.com/jthomperoo/k8shorizmetrics/v3/metrics/external"
+	"github.com/jthomperoo/k8shorizmetrics/v3/metrics/object"
+	"github.com/jthomperoo/k8shorizmetrics/v3/metrics/pods"
+	"github.com/jthomperoo/k8shorizmetrics/v3/metrics/resource"
 	autoscalingv2 "k8s.io/api/autoscaling/v2"
 )
 

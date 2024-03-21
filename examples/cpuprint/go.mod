@@ -3,7 +3,7 @@ module github.com/jthomperoo/k8shorizmetrics/examples/cpuprint
 go 1.21
 
 require (
-	github.com/jthomperoo/k8shorizmetrics/v2 v2.0.2
+	github.com/jthomperoo/k8shorizmetrics/v3 v3.0.0
 	k8s.io/api v0.29.3
 	k8s.io/apimachinery v0.29.3
 	k8s.io/client-go v0.29.3
@@ -55,4 +55,4 @@ require (
 	sigs.k8s.io/yaml v1.4.0 // indirect
 )
 
-replace github.com/jthomperoo/k8shorizmetrics/v2 => ../../
+replace github.com/jthomperoo/k8shorizmetrics/v3 => ../../

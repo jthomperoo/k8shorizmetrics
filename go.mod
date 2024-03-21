@@ -1,4 +1,4 @@
-module github.com/jthomperoo/k8shorizmetrics/v2
+module github.com/jthomperoo/k8shorizmetrics/v3
 
 go 1.21
 

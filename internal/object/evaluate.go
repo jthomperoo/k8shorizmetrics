@@ -31,8 +31,8 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/jthomperoo/k8shorizmetrics/v2/internal/replicas"
-	"github.com/jthomperoo/k8shorizmetrics/v2/metrics"
+	"github.com/jthomperoo/k8shorizmetrics/v3/internal/replicas"
+	"github.com/jthomperoo/k8shorizmetrics/v3/metrics"
 	autoscaling "k8s.io/api/autoscaling/v2"
 )
 
