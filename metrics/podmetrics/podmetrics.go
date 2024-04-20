@@ -21,9 +21,9 @@ import "time"
 
 // Metric contains pod metric value (the metric values are expected to be the metric as a milli-value)
 type Metric struct {
-	Timestamp time.Time
-	Window    time.Duration
-	Value     int64
+	Timestamp time.Time     `json:"timestamp"`
+	Window    time.Duration `json:"window"`
+	Value     int64         `json:"value"`
 }
 
 // MetricsInfo contains pod metrics as a map from pod names to MetricsInfo
