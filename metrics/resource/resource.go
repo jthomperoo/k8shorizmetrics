@@ -28,11 +28,11 @@ import (
 // in the current scale target (e.g. CPU or memory).  Such metrics are built in to Kubernetes, and have special scaling
 // options on top of those available to normal per-pod metrics (the "pods" source).
 type Metric struct {
-	PodMetricsInfo podmetrics.MetricsInfo `json:"pod_metrics_info"`
+	PodMetricsInfo podmetrics.MetricsInfo `json:"podMetricsInfo"`
 	Requests       map[string]int64       `json:"requests"`
-	ReadyPodCount  int64                  `json:"ready_pod_count"`
-	IgnoredPods    sets.String            `json:"ignored_pods"`
-	MissingPods    sets.String            `json:"missing_pods"`
-	TotalPods      int                    `json:"total_pods"`
+	ReadyPodCount  int64                  `json:"readyPodCount"`
+	IgnoredPods    sets.String            `json:"ignoredPods"`
+	MissingPods    sets.String            `json:"missingPods"`
+	TotalPods      int                    `json:"totalPods"`
 	Timestamp      time.Time              `json:"timestamp,omitempty"`
 }

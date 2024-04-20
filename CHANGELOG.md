@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- **BREAKING CHANGE** Types now use JSON tags which match Kubernetes convention, with naming using camel case rather
+than snake case. For example the Resource Metric field `PodMetricsInfo` is now serialized as `podMetricsInfo` rather
+than `pod_metrics_info`.
 
 ## [v3.0.0] - 2024-03-21
 ### Changed

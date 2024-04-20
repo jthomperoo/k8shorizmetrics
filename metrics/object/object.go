@@ -26,6 +26,6 @@ import (
 // Metric (Object) is a metric describing a kubernetes object (for example, hits-per-second on an Ingress object).
 type Metric struct {
 	Current       value.MetricValue `json:"current,omitempty"`
-	ReadyPodCount *int64            `json:"ready_pod_count,omitempty"`
+	ReadyPodCount *int64            `json:"readyPodCount,omitempty"`
 	Timestamp     time.Time         `json:"timestamp,omitempty"`
 }

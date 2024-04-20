@@ -28,6 +28,6 @@ import (
 // service, or QPS from loadbalancer running outside of cluster).
 type Metric struct {
 	Current       value.MetricValue `json:"current,omitempty"`
-	ReadyPodCount *int64            `json:"ready_pod_count,omitempty"`
+	ReadyPodCount *int64            `json:"readyPodCount,omitempty"`
 	Timestamp     time.Time         `json:"timestamp,omitempty"`
 }
