@@ -1,7 +1,7 @@
 [![Build](https://github.com/jthomperoo/k8shorizmetrics/workflows/main/badge.svg)](https://github.com/jthomperoo/k8shorizmetrics/actions)
-[![go.dev](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat)](https://pkg.go.dev/github.com/jthomperoo/k8shorizmetrics/v3)
+[![go.dev](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat)](https://pkg.go.dev/github.com/jthomperoo/k8shorizmetrics/v4)
 [![Go Report
-Card](https://goreportcard.com/badge/github.com/jthomperoo/k8shorizmetrics/v3)](https://goreportcard.com/report/github.com/jthomperoo/k8shorizmetrics/v3)
+Card](https://goreportcard.com/badge/github.com/jthomperoo/k8shorizmetrics/v4)](https://goreportcard.com/report/github.com/jthomperoo/k8shorizmetrics/v4)
 [![License](https://img.shields.io/:license-apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 # k8shorizmetrics
@@ -13,7 +13,7 @@ to work out the target replica count that the HPA does.
 ## Install
 
 ```bash
-go get -u github.com/jthomperoo/k8shorizmetrics/v3@v3.0.0
+go get -u github.com/jthomperoo/k8shorizmetrics/v4@v4.0.0
 ```
 
 ## Features
@@ -89,7 +89,7 @@ func main() {
 
 ## Documentation
 
-See the [Go doc](https://pkg.go.dev/github.com/jthomperoo/k8shorizmetrics/v3).
+See the [Go doc](https://pkg.go.dev/github.com/jthomperoo/k8shorizmetrics/v4).
 
 ## Migration
 
@@ -137,6 +137,17 @@ if err != nil {
 ```
 
 You can use similar code for the `Evaluate` method of the `Evaluater`.
+
+### From v3 to v4
+
+To update to `v4` you will need to update all references in your code that refer to
+`github.com/jthomperoo/k8shorizmetrics/v3` to use `github.com/jthomperoo/k8shorizmetrics/v4`.
+
+The only behaviour change is around serialisation into JSON. Fields are now serialised using camel case rather
+than snake case to match the Kubernetes conventions.
+
+If you are relying on JSON serialised values you need to use camel case now. For example the Resource Metric field
+`PodMetricsInfo` is now serialised as `podMetricsInfo` ratherthan `pod_metrics_info`.
 
 ## Examples
 

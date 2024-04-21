@@ -5,11 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [v4.0.0] - 2024-04-21
 ### Changed
-- Updated minimum Go version to `v1.22`.
+- **BREAKING CHANGE** Changed module path from `github.com/jthomperoo/k8shorizmetrics/v3` to
+`github.com/jthomperoo/k8shorizmetrics/v4`.
 - **BREAKING CHANGE** Types now use JSON tags which match Kubernetes convention, with naming using camel case rather
-than snake case. For example the Resource Metric field `PodMetricsInfo` is now serialized as `podMetricsInfo` rather
+than snake case. For example the Resource Metric field `PodMetricsInfo` is now serialised as `podMetricsInfo` rather
 than `pod_metrics_info`.
+- Updated minimum Go version to `v1.22`.
 
 ## [v3.0.0] - 2024-03-21
 ### Changed
@@ -61,7 +65,8 @@ call time as a parameter.
 - Allows insights into how the HPA makes decisions.
 - Supports scaling to and from 0.
 
-[Unreleased]: https://github.com/jthomperoo/k8shorizmetrics/compare/v3.0.0...HEAD
+[Unreleased]: https://github.com/jthomperoo/k8shorizmetrics/compare/v4.0.0...HEAD
+[v4.0.0]: https://github.com/jthomperoo/k8shorizmetrics/compare/v3.0.0...v4.0.0
 [v3.0.0]: https://github.com/jthomperoo/k8shorizmetrics/compare/v2.0.2...v3.0.0
 [v2.0.2]: https://github.com/jthomperoo/k8shorizmetrics/compare/v2.0.1...v2.0.2
 [v2.0.1]: https://github.com/jthomperoo/k8shorizmetrics/compare/v2.0.0...v2.0.1

@@ -20,8 +20,8 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/jthomperoo/k8shorizmetrics/v3/internal/replicas"
-	"github.com/jthomperoo/k8shorizmetrics/v3/metrics/podmetrics"
+	"github.com/jthomperoo/k8shorizmetrics/v4/internal/replicas"
+	"github.com/jthomperoo/k8shorizmetrics/v4/metrics/podmetrics"
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 

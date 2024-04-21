@@ -30,12 +30,12 @@ package k8shorizmetrics
 import (
 	"fmt"
 
-	"github.com/jthomperoo/k8shorizmetrics/v3/internal/external"
-	"github.com/jthomperoo/k8shorizmetrics/v3/internal/object"
-	"github.com/jthomperoo/k8shorizmetrics/v3/internal/pods"
-	"github.com/jthomperoo/k8shorizmetrics/v3/internal/replicas"
-	"github.com/jthomperoo/k8shorizmetrics/v3/internal/resource"
-	"github.com/jthomperoo/k8shorizmetrics/v3/metrics"
+	"github.com/jthomperoo/k8shorizmetrics/v4/internal/external"
+	"github.com/jthomperoo/k8shorizmetrics/v4/internal/object"
+	"github.com/jthomperoo/k8shorizmetrics/v4/internal/pods"
+	"github.com/jthomperoo/k8shorizmetrics/v4/internal/replicas"
+	"github.com/jthomperoo/k8shorizmetrics/v4/internal/resource"
+	"github.com/jthomperoo/k8shorizmetrics/v4/metrics"
 	autoscalingv2 "k8s.io/api/autoscaling/v2"
 )
 
