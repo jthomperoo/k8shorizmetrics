@@ -19,10 +19,10 @@ package fake
 import (
 	"time"
 
-	externalmetrics "github.com/jthomperoo/k8shorizmetrics/v3/metrics/external"
-	objectmetrics "github.com/jthomperoo/k8shorizmetrics/v3/metrics/object"
-	podsmetrics "github.com/jthomperoo/k8shorizmetrics/v3/metrics/pods"
-	resourcemetrics "github.com/jthomperoo/k8shorizmetrics/v3/metrics/resource"
+	externalmetrics "github.com/jthomperoo/k8shorizmetrics/v4/metrics/external"
+	objectmetrics "github.com/jthomperoo/k8shorizmetrics/v4/metrics/object"
+	podsmetrics "github.com/jthomperoo/k8shorizmetrics/v4/metrics/pods"
+	resourcemetrics "github.com/jthomperoo/k8shorizmetrics/v4/metrics/resource"
 	autoscalingv2 "k8s.io/api/autoscaling/v2"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

@@ -5,7 +5,7 @@ go 1.22.0
 toolchain go1.22.2
 
 require (
-	github.com/jthomperoo/k8shorizmetrics/v3 v3.0.0
+	github.com/jthomperoo/k8shorizmetrics/v4 v4.0.0
 	k8s.io/api v0.30.0
 	k8s.io/apimachinery v0.30.0
 	k8s.io/client-go v0.30.0
@@ -57,4 +57,4 @@ require (
 	sigs.k8s.io/yaml v1.4.0 // indirect
 )
 
-replace github.com/jthomperoo/k8shorizmetrics/v3 => ../../
+replace github.com/jthomperoo/k8shorizmetrics/v4 => ../../

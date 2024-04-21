@@ -20,7 +20,7 @@ package external
 import (
 	"time"
 
-	"github.com/jthomperoo/k8shorizmetrics/v3/metrics/value"
+	"github.com/jthomperoo/k8shorizmetrics/v4/metrics/value"
 )
 
 // Metric (Resource) is a global metric that is not associated with any Kubernetes object. It allows autoscaling based

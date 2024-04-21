@@ -30,12 +30,12 @@ package external
 import (
 	"fmt"
 
-	"github.com/jthomperoo/k8shorizmetrics/v3/internal/podutil"
-	"github.com/jthomperoo/k8shorizmetrics/v3/metrics/external"
-	"github.com/jthomperoo/k8shorizmetrics/v3/metrics/value"
+	"github.com/jthomperoo/k8shorizmetrics/v4/internal/podutil"
+	"github.com/jthomperoo/k8shorizmetrics/v4/metrics/external"
+	"github.com/jthomperoo/k8shorizmetrics/v4/metrics/value"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	metricsclient "github.com/jthomperoo/k8shorizmetrics/v3/metricsclient"
+	metricsclient "github.com/jthomperoo/k8shorizmetrics/v4/metricsclient"
 	"k8s.io/apimachinery/pkg/labels"
 )
 

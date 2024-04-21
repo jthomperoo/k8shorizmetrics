@@ -31,10 +31,10 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/jthomperoo/k8shorizmetrics/v3/internal/replicas"
-	"github.com/jthomperoo/k8shorizmetrics/v3/metrics"
-	"github.com/jthomperoo/k8shorizmetrics/v3/metrics/podmetrics"
-	"github.com/jthomperoo/k8shorizmetrics/v3/metricsclient"
+	"github.com/jthomperoo/k8shorizmetrics/v4/internal/replicas"
+	"github.com/jthomperoo/k8shorizmetrics/v4/metrics"
+	"github.com/jthomperoo/k8shorizmetrics/v4/metrics/podmetrics"
+	"github.com/jthomperoo/k8shorizmetrics/v4/metricsclient"
 )
 
 // Evaluate (resource) calculates a replica count evaluation, using the tolerance and calculater provided

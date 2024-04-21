@@ -17,7 +17,7 @@ limitations under the License.
 package fake
 
 import (
-	"github.com/jthomperoo/k8shorizmetrics/v3/metrics"
+	"github.com/jthomperoo/k8shorizmetrics/v4/metrics"
 )
 
 // ExternalEvaluater (fake) provides a way to insert functionality into a ExternalEvaluater
