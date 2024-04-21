@@ -36,9 +36,9 @@ import (
 	"log"
 	"time"
 
-	"github.com/jthomperoo/k8shorizmetrics"
-	"github.com/jthomperoo/k8shorizmetrics/metricsclient"
-	"github.com/jthomperoo/k8shorizmetrics/podsclient"
+	"github.com/jthomperoo/k8shorizmetrics/v4"
+	"github.com/jthomperoo/k8shorizmetrics/v4/metricsclient"
+	"github.com/jthomperoo/k8shorizmetrics/v4/podsclient"
 	"k8s.io/api/autoscaling/v2"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
