@@ -9,16 +9,11 @@ jobs:
     steps:
     - uses: actions/setup-go@v1
       with:
-        go-version: 1.21
+        go-version: 1.22
       id: go
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
-    - name: Lint, format, and test
-      run: |
-
-        make lint
-        make format
-        # Exit if after formatting there are any code differences
-        git diff --exit-code
-
-        make test
+    - run: go get
+    - run: make lint
+    - run: make format && git diff --exit-code
+    - run: make test

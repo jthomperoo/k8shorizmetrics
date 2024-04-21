@@ -14,7 +14,7 @@ replicas the HPA would target based on those metrics and print them to stdout.
 
 To follow the steps below and to see this example in action you need the following installed:
 
-- [Go v1.21+](https://go.dev/doc/install)
+- [Go v1.22+](https://go.dev/doc/install)
 - [K3D v5.6+](https://k3d.io/v5.6.0/#installation)
 
 After you have installed the above you can provision a development Kubernetes cluster by running:

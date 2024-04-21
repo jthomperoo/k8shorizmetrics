@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
+- Updated minimum Go version to `v1.22`.
 - **BREAKING CHANGE** Types now use JSON tags which match Kubernetes convention, with naming using camel case rather
 than snake case. For example the Resource Metric field `PodMetricsInfo` is now serialized as `podMetricsInfo` rather
 than `pod_metrics_info`.
